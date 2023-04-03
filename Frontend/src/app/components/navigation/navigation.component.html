@@ -1,1 +1,14 @@
-<p>navigation works!</p>
+<div class="navigation">
+  <nav class="nav">
+    <a routerLink="/" class="logo">SHED</a>
+    <ul class="menu">
+      <li class="menu-li">
+        <a routerLink="/available_rooms" class="link">Available rooms</a>
+        <a routerLink="/settings" class="link">Settings</a>
+      </li>
+      <li class="menu-li">
+        <button class="link btn_out" (click)="logout()">Logout</button>
+      </li>
+    </ul>
+  </nav>
+</div>

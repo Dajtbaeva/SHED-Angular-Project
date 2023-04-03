@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +10,10 @@ import { StudentPageComponent } from './pages/student-page/student-page.componen
 import { TutorPageComponent } from './pages/tutor-page/tutor-page.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
+import { AuthInterceptor } from './AuthInterceptor';
+import { AvailableRoomsComponent } from './pages/available-rooms/available-rooms.component';
+import { SettingsComponent } from './pages/settings/settings.component';
+import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 
 @NgModule({
   declarations: [
@@ -16,13 +22,15 @@ import { NavigationComponent } from './components/navigation/navigation.componen
     StudentPageComponent,
     TutorPageComponent,
     ScheduleComponent,
-    NavigationComponent
+    NavigationComponent,
+    AvailableRoomsComponent,
+    SettingsComponent,
+    NotFoundPageComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
