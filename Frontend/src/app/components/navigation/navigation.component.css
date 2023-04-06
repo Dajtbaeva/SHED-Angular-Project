@@ -10,7 +10,6 @@
   border-radius: 5px;
 }
 .login button:hover {
-  border-color: #83f0e1;
   background: #83f0e1;
 }
 .btn_out {
@@ -19,7 +18,7 @@
 }
 .nav {
   padding: 0 50px;
-  height: 100px;
+  height: 80px;
   background-color: #18c0aa;
   display: flex;
   justify-content: space-between;
