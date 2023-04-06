@@ -1,7 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-}
 .body {
   display: flex;
   flex-direction: column;
@@ -46,8 +42,8 @@
   border-radius: 5px;
 }
 .login button:hover {
-  border-color: #83f0e1;
-  background: #83f0e1;
+  border-color: #23dfc6;
+  background: #23dfc6;
 }
 .btn_out {
   align-self: center;
