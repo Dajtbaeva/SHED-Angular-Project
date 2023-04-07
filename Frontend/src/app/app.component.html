@@ -1,0 +1,58 @@
+<div class="body">
+  <div class="login" *ngIf="!is_logged">
+    <h1>SHED</h1>
+    <h2>Please login!</h2>
+    <p>Username <input type="text" [(ngModel)]="username" /></p>
+    <p>Password <input type="password" [(ngModel)]="pswd" /></p>
+    <button class="btn_in" (click)="login()">Login</button>
+  </div>
+</div>
+
+<div class="content" *ngIf="is_logged">
+  <app-navigation (exit)="logout()"></app-navigation>
+  <div class="main">
+    <router-outlet></router-outlet>
+    <div class="main">
+      <div class="shed">
+        <table>
+          <tr>
+            <th></th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+          </tr>
+          <tr>
+            <th>8:00 - 9:00</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>9:00 - 10:00</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>10:00 - 11:00</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

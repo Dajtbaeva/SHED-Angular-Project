@@ -1,0 +1,47 @@
+.btn_out {
+  width: 50%;
+  padding: 3px 0;
+  margin-top: 15px;
+  font: inherit;
+  color: white;
+  cursor: pointer;
+  border: none;
+  background: #18c0aa;
+  border-radius: 5px;
+}
+.login button:hover {
+  background: #83f0e1;
+}
+.btn_out {
+  align-self: center;
+  margin: 20px 0;
+}
+.nav {
+  padding: 0 50px;
+  height: 80px;
+  background-color: #18c0aa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+.menu {
+  list-style: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.logo {
+  font-size: 40px;
+  text-decoration: none;
+  color: #fff;
+}
+.link {
+  color: #fff;
+  font-size: 20px;
+  text-decoration: none;
+  margin-left: 20px;
+}
+.link:hover {
+  color: #b9b3b2;
+}
