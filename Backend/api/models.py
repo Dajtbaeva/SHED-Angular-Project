@@ -6,38 +6,46 @@ class Organization(models.Model):
     name = models.CharField(max_length=50)
 
 
+class Role(models.Model):
+    name = models.CharField(max_length=50)
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=50)
+
+
 class User(models.Model):
+    username = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)  # updated reformation
-    role_id = models.IntegerField()
-    organization_id = models.ForeignKey(Organization, on_delete=models.CASCADE)  # user_id = models.PrimaryKey()
+    email = models.CharField(max_length=50)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, default=None)
 
 
 class Room(models.Model):
     room_number = models.CharField(max_length=50)
     capacity = models.IntegerField()
-    organization_id = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     # room_id = mode
 
 
 class Disciplines(models.Model):
-    org_id = models.IntegerField()
-    tutor = models.IntegerField()
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    tutor = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
 
 
 class Events(models.Model):
-    event_start_time = models.DateTimeField()
-    room_id = models.ForeignKey(Room, on_delete=models.CASCADE())
-    discipline_id = models.ForeignKey(Disciplines, on_delete=models.CASCADE())
-    organizer_name = models.CharField(max_length=50)
-    organizer_surname = models.CharField(max_length=50)
-    day = models.CharField(max_length=50)
-    tutor_id = models.IntegerField()
+    event_start_time = models.IntegerField()
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    discipline = models.ForeignKey(Disciplines, on_delete=models.CASCADE)
+    day = models.IntegerField()
+    tutor = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-class participants(models.Model):
-    event_id = models.ForeignKey(Events, on_delete=models.CASCADE())
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE())
+class Participants(models.Model):
+    event = models.ForeignKey(Events, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
