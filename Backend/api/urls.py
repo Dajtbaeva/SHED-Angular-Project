@@ -16,5 +16,4 @@ urlpatterns = [
     path('discipline/<int:discipline_id>', DisciplinesDetailAPIView.as_view())
 
     #comment to check
-    # alooalaoasldasldao
 ]
