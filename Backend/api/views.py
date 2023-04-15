@@ -1,8 +1,11 @@
+import datetime
+import jwt
+from django.conf import settings
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from api.models import *
 from api.serializers import *
 
 
@@ -28,6 +31,33 @@ from api.serializers import *
 #
 #     data = {"tutor events" : list(events.values())}
 #     return Response(data)
+
+
+class LoginView(APIView):
+    def post(self, request):
+        username = request.data['username']
+        password = request.data['password']
+        user = User.objects.get(username=username)
+        if user is None:
+            raise AuthenticationFailed('user not found')
+
+        if not user.check_password(password):
+            raise AuthenticationFailed('incorrect password')
+
+        payload = {
+            'user_id': user.id,
+            'username': user.username,
+            'role': user.role.name,
+            'org_id': user.organization.id,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+        }
+        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256').decode('utf-8')
+        return Response({
+            'user_id': user.id,
+            'role': user.role.name,
+            'token': token
+        })
+
 
 # Group
 class GroupListAPIView(APIView):
@@ -80,6 +110,7 @@ class UserListAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        salt = bcrypt.gensalt()
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
