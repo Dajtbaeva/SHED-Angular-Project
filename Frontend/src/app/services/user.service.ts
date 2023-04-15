@@ -21,4 +21,5 @@ export class UserService {
   // getCompanies(): Observable<ICompany[]> {
   //   return this.http.get<ICompany[]>(`${this.URL}/companies/`);
   // }
+  
 }

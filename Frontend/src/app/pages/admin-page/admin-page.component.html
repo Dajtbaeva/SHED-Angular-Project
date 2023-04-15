@@ -1,1 +1,49 @@
-<p>admin-page works!</p>
+<div class="nav">
+  <button
+    *ngFor="let tab of tabs"
+    (click)="setTab(tab.num)"
+    [ngClass]="{ active: activeTab === tab.num }"
+  >
+    {{ tab.name }}
+  </button>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 1">
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
+    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
+    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
+    modi accusantium sint temporibus dolorum TUTOR!
+  </p>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 2">
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
+    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
+    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
+    modi accusantium sint temporibus dolorum STUDENT!
+  </p>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 3">
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
+    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
+    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
+    modi accusantium sint temporibus dolorum GROUP!
+  </p>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 4">
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
+    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
+    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
+    modi accusantium sint temporibus dolorum DISCIPLINE!
+  </p>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 5">
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
+    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
+    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
+    modi accusantium sint temporibus dolorum EVENT!
+  </p>
+</div>
