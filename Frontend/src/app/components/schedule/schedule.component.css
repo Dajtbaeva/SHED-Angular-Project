@@ -1,0 +1,24 @@
+.shed {
+  margin: 100px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+h3 {
+  padding: 15px;
+  font-variant: inherit;
+  font-size: 1.5rem;
+}
+table {
+  border: 1px solid #ccc;
+  width: 80%;
+}
+td,
+th {
+  border: 1px solid #ccc;
+  width: 10%;
+}
+p {
+  text-align: center;
+}
