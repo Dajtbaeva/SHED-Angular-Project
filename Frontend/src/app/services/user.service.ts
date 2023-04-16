@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { AuthToken } from 'src/app/models/token';
@@ -119,6 +119,59 @@ export class UserService {
 
   getEvents(): Observable<IEvent[]> {
     return this.http.get<IEvent[]>(`${this.URL}/event/`);
+  }
+
+  getAvailableRooms(hour: number, day: string): Observable<IRoom[]> {
+    const params = new HttpParams()
+      .set('hour', hour.toString())
+      .set('day', day);
+    return this.http.get<IRoom[]>(`${this.URL}/available_rooms/`, { params });
+  }
+
+  getUserEvents(user_id: number) {
+    // alert('TODO');
+    return [
+      {
+        id: 1,
+        event_start_time: 8,
+        room: '123',
+        discipline: 'Math',
+        day: 'monday',
+        tutor: 'tutorName1',
+      },
+      {
+        id: 3,
+        event_start_time: 10,
+        room: '78',
+        discipline: 'Biology',
+        day: 'tuesday',
+        tutor: 'tutorName3',
+      },
+      {
+        id: 5,
+        event_start_time: 10,
+        room: '555',
+        discipline: 'Music',
+        day: 'thursday',
+        tutor: 'tutorName5',
+      },
+      {
+        id: 4,
+        event_start_time: 15,
+        room: '1',
+        discipline: 'Physics',
+        day: 'friday',
+        tutor: 'tutorName4',
+      },
+      {
+        id: 2,
+        event_start_time: 17,
+        room: '90',
+        discipline: 'English',
+        day: 'monday',
+        tutor: 'tutorName2',
+      },
+    ];
   }
 
   updateUser(user: IUser): Observable<IUser> {
