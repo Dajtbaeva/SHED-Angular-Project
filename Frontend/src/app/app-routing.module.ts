@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'admin/user/:id', component: UserItemComponent },
   { path: 'tutor', component: TutorPageComponent },
   { path: 'student', component: StudentPageComponent },
-  { path: 'available-rooms', component: AvailableRoomsComponent },
+  { path: 'available_rooms', component: AvailableRoomsComponent },
   { path: 'settings', component: SettingsComponent },
   { path: '**', component: NotFoundPageComponent },
 ];
