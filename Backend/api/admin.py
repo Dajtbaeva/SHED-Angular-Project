@@ -23,7 +23,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'role', 'organization', 'group']
+    list_display = ['id', 'username', 'role', 'organization', 'group']
 
 
 @admin.register(Room)

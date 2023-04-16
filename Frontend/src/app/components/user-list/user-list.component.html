@@ -1,0 +1,14 @@
+<div class="users" *ngFor="let user of users">
+  <div class="card">
+    <div class="name">
+      <p>{{ user.name | titlecase }} {{ user.surname | titlecase }}</p>
+    </div>
+    <div class="details">
+      <button (click)="viewDetails(user)">Details</button>
+      <!-- <button>
+          <a routerLink="/albums/{{ album.id }}">Details</a>
+        </button> -->
+      <button class="delete" (click)="deleteUser(user)">Delete</button>
+    </div>
+  </div>
+</div>

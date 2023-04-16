@@ -14,6 +14,8 @@ import { AuthInterceptor } from './AuthInterceptor';
 import { AvailableRoomsComponent } from './pages/available-rooms/available-rooms.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { UserItemComponent } from './components/user-item/user-item.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.com
     AvailableRoomsComponent,
     SettingsComponent,
     NotFoundPageComponent,
+    UserListComponent,
+    UserItemComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [
