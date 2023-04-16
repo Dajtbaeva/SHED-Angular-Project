@@ -129,7 +129,7 @@ export class UserService {
   }
 
   getUserEvents(user_id: number) {
-    // alert('TODO');
+    alert(`It is current user's id ${user_id}`);
     return [
       {
         id: 1,
