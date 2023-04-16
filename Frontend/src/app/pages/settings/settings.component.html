@@ -1,1 +1,20 @@
-<p>settings works!</p>
+<div class="main">
+  <div class="form">
+    <h3>Settings</h3>
+    <p>
+      Change your username
+      <input type="text" [(ngModel)]="username" id="username" name="username" />
+    </p>
+    <button class="btn_in" (click)="changeUsername()">Change</button>
+    <p>
+      Change your password
+      <input
+        type="password"
+        [(ngModel)]="password"
+        id="password"
+        name="password"
+      />
+    </p>
+    <button class="btn_in" (click)="changePassword()">Change</button>
+  </div>
+</div>
