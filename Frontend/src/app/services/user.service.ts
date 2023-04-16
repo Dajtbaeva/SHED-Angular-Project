@@ -1,17 +1,20 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { AuthToken } from 'src/app/models/token';
-import { IUser } from 'src/app/models/user';
+import { IUser } from '../models/user';
 import { IGroup } from '../models/group';
 import { IDiscipline } from '../models/discipline';
 import { IRoom } from '../models/room';
+import { IEvent } from '../models/event';
+// import { randomBytes } from 'crypto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private URL = 'http://127.0.0.1:8000/api';
+  private readonly PASSWORD_LENGTH = 8;
 
   constructor(private http: HttpClient) {}
 
@@ -21,7 +24,14 @@ export class UserService {
       password,
     });
   }
-
+  getCurrentUser(): Observable<IUser> {
+    // const token = localStorage.getItem('token');
+    // if (!token) {
+    //   return null;
+    // }
+    const id = localStorage.getItem('user_id');
+    return this.http.get<IUser>(`${this.URL}/user/${id}`);
+  }
   addNewUser(
     name: string,
     surname: string,
@@ -30,9 +40,14 @@ export class UserService {
     org_id: string,
     group: string | null
   ) {
+    const username =
+      name[0].toLocaleLowerCase() + '_' + surname.toLocaleLowerCase();
+    // const password = this.generatePassword();
     return this.http.post<IUser>(`${this.URL}/user/`, {
       name,
       surname,
+      username,
+      // password,
       email,
       role,
       organization: org_id,
@@ -60,12 +75,34 @@ export class UserService {
     });
   }
 
+  addNewEvent(
+    addTime: number,
+    addDay: string,
+    addTutor: string,
+    disciplineName: string,
+    roomName: string
+  ) {
+    return this.http.post<IEvent>(`${this.URL}/event/`, {
+      addTime,
+      roomName,
+      disciplineName,
+      addDay,
+      addTutor,
+    });
+  }
+
   getTutors(): Observable<IUser[]> {
     return this.http.get<IUser[]>(`${this.URL}/tutors/`);
   }
 
   getStudents(): Observable<IUser[]> {
     return this.http.get<IUser[]>(`${this.URL}/students/`);
+  }
+
+  getUserById(id: number): Observable<IUser> {
+    return from(
+      fetch(`${this.URL}/user/${id}`).then((response) => response.json())
+    );
   }
 
   getGroups(): Observable<IGroup[]> {
@@ -80,9 +117,28 @@ export class UserService {
     return this.http.get<IRoom[]>(`${this.URL}/room/`);
   }
 
-  getUserById(id: number): Observable<IUser> {
+  getEvents(): Observable<IEvent[]> {
+    return this.http.get<IEvent[]>(`${this.URL}/event/`);
+  }
+
+  updateUser(user: IUser): Observable<IUser> {
+    console.log(user);
+    return this.http.put<IUser>(`${this.URL}/user/${user.id}/`, user, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+  updateUser2(user: IUser): Observable<IUser> {
+    return this.http.put<IUser>(`${this.URL}/${user.id}`, user);
+  }
+  updateUser3(user: IUser): Observable<IUser> {
     return from(
-      fetch(`${this.URL}/user/${id}`).then((response) => response.json())
+      fetch(`${this.URL}/user/${user.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(user),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => response.json())
     );
   }
 
@@ -109,4 +165,23 @@ export class UserService {
       method: 'DELETE',
     });
   }
+
+  deleteEvent(id: number) {
+    return fetch(`${this.URL}/event/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || '';
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  }
+
+  // generatePassword(): string {
+  //   const buffer = randomBytes(Math.ceil(this.PASSWORD_LENGTH / 2));
+  //   return buffer.toString('hex').slice(0, this.PASSWORD_LENGTH);
+  //   // return randomBytes(6).toString('hex');
+  // }
 }

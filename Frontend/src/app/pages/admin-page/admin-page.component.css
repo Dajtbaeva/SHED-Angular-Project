@@ -134,3 +134,9 @@ button:hover {
 .delete:hover {
   background-color: #5c2121;
 }
+#group-choice,
+#tutor-choice,
+#discipline-choice,
+#room-choice {
+  width: 70%;
+}
