@@ -1,11 +1,15 @@
 import datetime
+
+import bcrypt
 import jwt
 from django.conf import settings
+from django.db.models import Model
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.core.exceptions import ObjectDoesNotExist
 
 from api.serializers import *
 
@@ -80,16 +84,20 @@ class GroupDetailAPIView(APIView):
     def get_object(self, group_id):
         try:
             return Group.objects.get(pk=group_id)
-        except Group.DoesNotExist as e:
-            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist:
+            return Response({'error': 'does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, group_id):
         instance = self.get_object(group_id)
+        if type(instance) == Response:
+            return instance
         serializer = GroupSerializer(instance)
         return Response(serializer.data)
 
     def put(self, request, group_id):
         instance = self.get_object(group_id)
+        if type(instance) == Response:
+            return instance
         serializer = GroupSerializer(instance=instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -98,6 +106,8 @@ class GroupDetailAPIView(APIView):
 
     def delete(self, request, group_id):
         instance = self.get_object(group_id)
+        if type(instance) == Response:
+            return instance
         instance.delete()
         return Response({'deleted': True})
 
@@ -138,16 +148,20 @@ class UserDetailAPIView(APIView):
     def get_object(self, user_id):
         try:
             return User.objects.get(pk=user_id)
-        except User.DoesNotExist as e:
-            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist:
+            return Response({'error': 'does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, user_id):
         instance = self.get_object(user_id)
+        if type(instance) == Response:
+            return instance
         serializer = UserSerializer(instance)
         return Response(serializer.data)
 
     def put(self, request, user_id):
         instance = self.get_object(user_id)
+        if type(instance) == Response:
+            return instance
         serializer = UserSerializer(instance=instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -156,6 +170,8 @@ class UserDetailAPIView(APIView):
 
     def delete(self, request, user_id):
         instance = self.get_object(user_id)
+        if type(instance) == Response:
+            return instance
         instance.delete()
         return Response({'deleted': True})
 
@@ -182,16 +198,20 @@ class RoomDetailAPIView(APIView):
     def get_object(self, room_id):
         try:
             return Room.objects.get(pk=room_id)
-        except Room.DoesNotExist as e:
+        except ObjectDoesNotExist as e:
             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, room_id):
         instance = self.get_object(room_id)
+        if type(instance) == Response:
+            return instance
         serializer = RoomSerializer(instance)
         return Response(serializer.data)
 
     def put(self, request, room_id):
         instance = self.get_object(room_id)
+        if type(instance) == Response:
+            return instance
         serializer = RoomSerializer(instance=instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -200,6 +220,8 @@ class RoomDetailAPIView(APIView):
 
     def delete(self, request, room_id):
         instance = self.get_object(room_id)
+        if type(instance) == Response:
+            return instance
         instance.delete()
         return Response({'deleted': True})
 
@@ -231,11 +253,15 @@ class EventDetailAPIView(APIView):
 
     def get(self, request, event_id):
         instance = self.get_object(event_id)
+        if type(instance) == Response:
+            return instance
         serializer = EventsSerializer(instance)
         return Response(serializer.data)
 
     def put(self, request, event_id):
         instance = self.get_object(event_id)
+        if type(instance) == Response:
+            return instance
         serializer = EventsSerializer(instance=instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -244,6 +270,8 @@ class EventDetailAPIView(APIView):
 
     def delete(self, request, event_id):
         instance = self.get_object(event_id)
+        if type(instance) == Response:
+            return instance
         instance.delete()
         return Response({'deleted': True})
 
@@ -270,16 +298,20 @@ class DisciplinesDetailAPIView(APIView):
     def get_object(self, discipline_id):
         try:
             return Disciplines.objects.get(pk=discipline_id)
-        except Disciplines.DoesNotExist as e:
+        except ObjectDoesNotExist as e:
             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, discipline_id):
         instance = self.get_object(discipline_id)
+        if type(instance) == Response:
+            return instance
         serializer = DisciplinesSerializer(instance)
         return Response(serializer.data)
 
     def put(self, request, discipline_id):
         instance = self.get_object(discipline_id)
+        if type(instance) == Response:
+            return instance
         serializer = DisciplinesSerializer(instance=instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -288,6 +320,8 @@ class DisciplinesDetailAPIView(APIView):
 
     def delete(self, request, discipline_id):
         instance = self.get_object(discipline_id)
+        if type(instance) == Response:
+            return instance
         instance.delete()
         return Response({'deleted': True})
 # END

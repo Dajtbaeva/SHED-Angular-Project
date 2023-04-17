@@ -33,6 +33,8 @@ class User(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
+    is_active = models.BooleanField(default=True, blank=True)
+    is_verified = models.BooleanField(default=True, blank=True)
 
     def set_password(self, password):
         salt = bcrypt.gensalt()

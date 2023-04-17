@@ -34,10 +34,12 @@ class UserSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name')
         instance.surname = validated_data.get('surname')
         instance.username = validated_data.get('username')
-        instance.password = validated_data.get('password')
         instance.email = validated_data.get('email')
         instance.role = validated_data.get('role')
-        instance.organization = validated_data.get('organization_id')
+        instance.organization = validated_data.get('organization')
+        password = validated_data.pop('password')
+        if password is not None:
+            instance.set_password(password)
         instance.save()
         return instance
 
