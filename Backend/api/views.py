@@ -8,7 +8,6 @@ from rest_framework.views import APIView
 
 from api.serializers import *
 
-
 # НА ИСПРАВЛЕНИЕ
 # def get_users_events(request, user_id):
 #     events = Participants.objects.get(user_id = user_id)
