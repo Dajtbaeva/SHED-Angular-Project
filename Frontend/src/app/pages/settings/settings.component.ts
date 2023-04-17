@@ -31,7 +31,7 @@ export class SettingsComponent {
       this.userService.getUserById(+id).subscribe((currentUser) => {
         currentUser.password = this.password;
         this.password = '';
-        this.userService.updateUser(currentUser);
+        this.userService.updateUser3(currentUser);
       });
       alert('Password is successfully changed!');
     }
