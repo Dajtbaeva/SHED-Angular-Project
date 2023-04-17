@@ -3,6 +3,7 @@ import jwt
 from django.conf import settings
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -54,6 +55,7 @@ class LoginView(APIView):
         return Response({
             'user_id': user.id,
             'role': user.role.name,
+            'org_id': user.organization.id,
             'token': token
         })
 
@@ -115,6 +117,20 @@ class UserListAPIView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TutorListAPIView(APIView):
+    def get(self, request):
+        users = User.objects.all().filter(role=3)
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+
+class StudentListAPIView(APIView):
+    def get(self, request):
+        users = User.objects.all().filter(role=2)
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
 
 
 class UserDetailAPIView(APIView):

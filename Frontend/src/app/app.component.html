@@ -9,7 +9,7 @@
 </div>
 
 <div class="content" *ngIf="is_logged">
-  <app-navigation (exit)="logout()"></app-navigation>
+  <app-navigation class="nav" (exit)="logout()"></app-navigation>
   <div class="main">
     <router-outlet></router-outlet>
   </div>

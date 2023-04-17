@@ -8,42 +8,240 @@
   </button>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 1">
-  <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
-    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
-    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
-    modi accusantium sint temporibus dolorum TUTOR!
-  </p>
+  <app-user-list [role]="tutor"></app-user-list>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 2">
-  <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
-    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
-    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
-    modi accusantium sint temporibus dolorum STUDENT!
-  </p>
+  <div class="form">
+    <h3>Add new tutor</h3>
+    <p>
+      Name
+      <input type="text" [(ngModel)]="addName" id="name" name="name" required />
+    </p>
+    <p>
+      Surname
+      <input
+        type="text"
+        [(ngModel)]="addSurname"
+        id="surname"
+        name="surname"
+        required
+      />
+    </p>
+    <p>
+      Email
+      <input
+        type="email"
+        [(ngModel)]="addEmail"
+        id="email"
+        name="email"
+        required
+      />
+    </p>
+    <button class="btn_in" (click)="addNewUser(tutor)">Add</button>
+  </div>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 3">
-  <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
-    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
-    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
-    modi accusantium sint temporibus dolorum GROUP!
-  </p>
+  <app-user-list [role]="student"></app-user-list>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 4">
-  <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
-    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
-    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
-    modi accusantium sint temporibus dolorum DISCIPLINE!
-  </p>
+  <div class="form">
+    <h3>Add new student</h3>
+    <p>
+      Name
+      <input type="text" [(ngModel)]="addName" id="name" name="name" required />
+    </p>
+    <p>
+      Surname
+      <input
+        type="text"
+        [(ngModel)]="addSurname"
+        id="surname"
+        name="surname"
+        required
+      />
+    </p>
+    <p>
+      Email
+      <input
+        type="email"
+        [(ngModel)]="addEmail"
+        id="email"
+        name="email"
+        required
+      />
+    </p>
+    <input
+      list="groups"
+      id="group-choice"
+      name="group-choice"
+      placeholder="Choose a group"
+      [(ngModel)]="addGroup"
+    />
+    <datalist id="groups">
+      <option *ngFor="let group of groups" value="{{ group.name }}"></option>
+    </datalist>
+    <button class="btn_in" (click)="addNewUser(student)">Add</button>
+  </div>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 5">
-  <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum odit
-    commodi ea, voluptatibus ut blanditiis autem consequuntur officiis fugit
-    cupiditate repellat, praesentium illum quos hic sit possimus unde. Magni
-    modi accusantium sint temporibus dolorum EVENT!
-  </p>
+  <div class="groups" *ngFor="let group of groups">
+    <div class="card">
+      <div class="name">
+        <p>{{ group.name | titlecase }}</p>
+        <div class="details">
+          <button class="delete" (click)="deleteGroup(group)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form">
+    <h3>Add new group</h3>
+    <p>
+      Enter group name
+      <input
+        type="text"
+        [(ngModel)]="groupName"
+        id="name"
+        name="name"
+        required
+      />
+    </p>
+    <button class="btn_in" (click)="addNewGroup()">Add</button>
+  </div>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 6">
+  <div class="disciplines" *ngFor="let discipline of disciplines">
+    <div class="card">
+      <div class="name">
+        <p>{{ discipline.name | titlecase }}</p>
+        <p>{{ discipline.tutor | titlecase }}</p>
+        <div class="details">
+          <button class="delete" (click)="deleteDiscipline(discipline)">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form">
+    <h3>Add new discipline</h3>
+    <p>
+      Enter discipline name
+      <input
+        type="text"
+        [(ngModel)]="disciplineName"
+        id="name"
+        name="name"
+        required
+      />
+    </p>
+    <input
+      list="tutors"
+      data-list="tutors"
+      id="tutor-choice"
+      name="tutor-choice"
+      placeholder="Choose a tutor"
+      [(ngModel)]="addTutor"
+    />
+    <datalist id="tutors">
+      <option
+        *ngFor="let tutor of tutors"
+        value="{{ tutor.name }} {{ tutor.surname }}"
+      ></option>
+    </datalist>
+    <button class="btn_in" (click)="addNewGroup()">Add</button>
+  </div>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 7">
+  <div class="rooms" *ngFor="let room of rooms">
+    <div class="card">
+      <div class="name">
+        <p>{{ room.name | titlecase }}</p>
+        <p>{{ room.capacity | titlecase }}</p>
+        <div class="details">
+          <button class="delete" (click)="deleteRoom(room)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form">
+    <h3>Add new room</h3>
+    <p>
+      Enter room name
+      <input
+        type="text"
+        [(ngModel)]="roomName"
+        id="name"
+        name="name"
+        required
+      />
+    </p>
+    <p>
+      Enter capacity of room
+      <input type="text" [(ngModel)]="roomCap" id="name" name="name" required />
+    </p>
+    <button class="btn_in" (click)="addNewRoom()">Add</button>
+  </div>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 8">
+  <div class="events" *ngFor="let event of events">
+    <div class="card">
+      <div class="name">
+        <p>{{ event.room | titlecase }}</p>
+        <p>{{ event.event_start_time }} {{ event.day }}</p>
+        <p>{{ event.tutor | titlecase }} {{ event.discipline | titlecase }}</p>
+      </div>
+      <div class="details">
+        <button class="delete" (click)="deleteEvent(event)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 9">
+  <div class="form">
+    <h3>Add new event</h3>
+    <p>
+      Enter start time
+      <input type="number" [(ngModel)]="addTime" id="time" name="time" required />
+    </p>
+    <p>
+      Enter day
+      <input type="text" [(ngModel)]="addDay" id="day" name="day" required />
+    </p>
+    <input
+      list="tutors"
+      data-list="tutors"
+      id="tutor-choice"
+      name="tutor-choice"
+      placeholder="Choose a tutor"
+      [(ngModel)]="addTutor"
+    />
+    <datalist id="tutors">
+      <option
+        *ngFor="let tutor of tutors"
+        value="{{ tutor.name }} {{ tutor.surname }}"
+      ></option>
+    </datalist>
+    <input
+      list="disciplines"
+      id="discipline-choice"
+      name="discipline-choice"
+      placeholder="Choose a discipline"
+      [(ngModel)]="disciplineName"
+    />
+    <datalist id="disciplines">
+      <option *ngFor="let discipline of disciplines" value="{{ discipline.name }}"></option>
+    </datalist>
+    <input
+      list="rooms"
+      id="room-choice"
+      name="room-choice"
+      placeholder="Choose a room"
+      [(ngModel)]="roomName"
+    />
+    <datalist id="rooms">
+      <option *ngFor="let room of rooms" value="{{ room.name }}"></option>
+    </datalist>
+    <button class="btn_in" (click)="addNewUser(student)">Add</button>
+  </div>
 </div>

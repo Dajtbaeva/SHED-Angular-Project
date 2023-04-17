@@ -1,1 +1,11 @@
-<p>available-rooms works!</p>
+<h3>Available rooms</h3>
+<div class="content" *ngIf="rooms">
+  <div class="rooms" *ngFor="let room of rooms">
+    <div class="card">
+      <div class="name">
+        <p>{{ room.name | titlecase }}</p>
+        <p>{{ room.capacity | titlecase }}</p>
+      </div>
+    </div>
+  </div>
+</div>
