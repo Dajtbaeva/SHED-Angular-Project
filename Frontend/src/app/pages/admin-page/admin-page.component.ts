@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { IDiscipline } from 'src/app/models/discipline';
 import { IEvent } from 'src/app/models/event';
 import { IGroup } from 'src/app/models/group';
 import { IRoom } from 'src/app/models/room';
@@ -19,10 +18,9 @@ export class AdminPageComponent implements OnInit {
     { name: 'Students', num: 3 },
     { name: 'Add new student', num: 4 },
     { name: 'Groups', num: 5 },
-    { name: 'Disciplines', num: 6 },
-    { name: 'Rooms', num: 7 },
-    { name: 'Events', num: 8 },
-    { name: 'Add new event', num: 9 },
+    { name: 'Rooms', num: 6 },
+    { name: 'Events', num: 7 },
+    { name: 'Add new event', num: 8 },
   ];
   tutor = 'tutor';
   student = 'student';
@@ -37,10 +35,9 @@ export class AdminPageComponent implements OnInit {
   groupName = '';
   disciplineName = '';
   roomName = '';
-  roomCap = '';
+  roomCap = 0;
   tutors: IUser[] = [];
   groups: IGroup[] = [];
-  disciplines: IDiscipline[] = [];
   // rooms: IRoom[] = [
   //   { id: 1, name: '123', capacity: '20' },
   //   { id: 2, name: '333', capacity: '30' },
@@ -52,9 +49,6 @@ export class AdminPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.getGroups().subscribe((data) => (this.groups = data));
-    this.userService
-      .getDisciplines()
-      .subscribe((data) => (this.disciplines = data));
     this.userService.getRooms().subscribe((data) => (this.rooms = data));
     this.userService.getEvents().subscribe((data) => (this.events = data));
   }
@@ -70,9 +64,9 @@ export class AdminPageComponent implements OnInit {
         this.addName,
         this.addSurname,
         this.addEmail,
-        this.addGroup,
         role,
-        org_id
+        org_id,
+        this.addGroup
       )
       .subscribe(() => {
         this.addName = '';
@@ -93,24 +87,10 @@ export class AdminPageComponent implements OnInit {
     this.groups = this.groups.filter((g) => g !== group);
   }
 
-  addNewDiscipline() {
-    this.userService
-      .addNewDiscipline(this.disciplineName, this.addTutor)
-      .subscribe(() => {
-        this.disciplineName = '';
-        this.addTutor = '';
-      });
-  }
-
-  deleteDiscipline(discipline: IDiscipline) {
-    this.userService.deleteDiscipline(discipline.id);
-    this.disciplines = this.disciplines.filter((d) => d !== discipline);
-  }
-
   addNewRoom() {
     this.userService.addNewRoom(this.roomName, this.roomCap).subscribe(() => {
       this.roomName = '';
-      this.roomCap = '';
+      this.roomCap = 0;
     });
   }
 
