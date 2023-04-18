@@ -3,6 +3,7 @@ from api.models import *
 
 
 class OrganizationSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=50)
 
 
@@ -12,6 +13,15 @@ class RoleSerializer(serializers.Serializer):
 
 class GroupSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=50)
+
+    def create(self, validated_data):
+        instance = Group.objects.create(**validated_data)
+        return instance
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name')
+        instance.save()
+        return instance
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -45,27 +55,26 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RoomSerializer(serializers.ModelSerializer):
-    organization = OrganizationSerializer()
 
     class Meta:
         model = Room
         fields = '__all__'
 
     def create(self, validated_data):
-        user = User.objects.create(**validated_data)
+        user = Room.objects.create(**validated_data)
         return user
 
     def update(self, instance, validated_data):
         instance.room_number = validated_data.get('room_number')
         instance.capacity = validated_data.get('capacity')
-        instance.organization = validated_data.get('organization_id')
+        instance.organization = validated_data.get('organization')
         instance.save()
         return instance
 
 
 class DisciplinesSerializer(serializers.ModelSerializer):
-    organization = OrganizationSerializer()
-    tutor = UserSerializer()
+    organization = OrganizationSerializer(read_only=True)
+    tutor = UserSerializer(read_only=True)
 
     class Meta:
         model = Disciplines
@@ -76,7 +85,7 @@ class DisciplinesSerializer(serializers.ModelSerializer):
         return discipline
 
     def update(self, instance, validated_data):
-        instance.organization = validated_data.get('organization_id')
+        instance.organization = validated_data.get('organization')
         instance.tutor = validated_data.get('tutor')
         instance.name = validated_data.get('name')
         instance.save()
@@ -84,9 +93,6 @@ class DisciplinesSerializer(serializers.ModelSerializer):
 
 
 class EventsSerializer(serializers.ModelSerializer):
-    room = RoomSerializer()
-    discipline = DisciplinesSerializer()
-    tutor = UserSerializer()
 
     class Meta:
         model = Events
@@ -98,8 +104,8 @@ class EventsSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.event_start_time = validated_data.get('event_start_time')
-        instance.room = validated_data.get('room_id')
-        instance.discipline = validated_data.get('discipline_id')
+        instance.room = validated_data.get('room')
+        instance.discipline = validated_data.get('discipline')
         instance.day = validated_data.get('day')
         instance.tutor = validated_data.get('tutor')
         instance.save()

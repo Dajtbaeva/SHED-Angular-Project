@@ -15,7 +15,9 @@ urlpatterns = [
     path('event/', EventListAPIView.as_view()),
     path('event/<int:event_id>', EventDetailAPIView.as_view()),
     path('discipline/', DisciplinesListAPIView.as_view()),
-    path('discipline/<int:discipline_id>', DisciplinesDetailAPIView.as_view())
+    path('discipline/<int:discipline_id>', DisciplinesDetailAPIView.as_view()),
+    path('get_aviable_rooms/', get_available_rooms),
+    path('get_user_events/', get_users_events)
 
     #comment to check
 ]
