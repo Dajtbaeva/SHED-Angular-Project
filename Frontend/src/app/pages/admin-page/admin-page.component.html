@@ -7,6 +7,7 @@
     {{ tab.name }}
   </button>
 </div>
+
 <div class="tabcontent" *ngIf="activeTab === 1">
   <app-user-list [role]="tutor"></app-user-list>
 </div>
@@ -113,7 +114,7 @@
   <div class="rooms" *ngFor="let room of rooms">
     <div class="card">
       <div class="name">
-        <p>{{ room.name | titlecase }}</p>
+        <p>{{ room.room_name | titlecase }} ({{ room.capacity }})</p>
       </div>
       <div class="details">
         <button class="delete" (click)="deleteRoom(room)">Delete</button>
@@ -153,8 +154,8 @@
           {{ event.event_start_time }}:00- {{ event.event_start_time + 1 }}:00,
           {{ event.day }}
         </p>
-        <p>{{ event.room | titlecase }}</p>
-        <p>{{ event.tutor | titlecase }} {{ event.discipline | titlecase }}</p>
+        <!-- <p>{{ event.room | titlecase }}</p>
+        <p>{{ event.tutor | titlecase }} {{ event.discipline | titlecase }}</p> -->
       </div>
       <div class="details">
         <button class="delete" (click)="deleteEvent(event)">Delete</button>
@@ -172,12 +173,28 @@
         [(ngModel)]="addTime"
         id="time"
         name="time"
+        maxlength="2"
+        min="8"
+        max="20"
+        step="1"
         required
       />
     </p>
     <p>
       Enter day
-      <input type="text" [(ngModel)]="addDay" id="day" name="day" required />
+      <input
+        list="days"
+        data-list="days"
+        type="text"
+        [(ngModel)]="addDay"
+        id="day"
+        name="day"
+        required
+      />
+
+      <datalist id="days">
+        <option *ngFor="let day of days" value="{{ day.name }} "></option>
+      </datalist>
     </p>
     <p>
       Enter name of discipline
@@ -203,6 +220,16 @@
       ></option>
     </datalist>
     <input
+      list="groups"
+      id="group-choice"
+      name="group-choice"
+      placeholder="Choose a group"
+      [(ngModel)]="addGroup"
+    />
+    <datalist id="groups">
+      <option *ngFor="let group of groups" value="{{ group.name }}"></option>
+    </datalist>
+    <input
       list="rooms"
       id="room-choice"
       name="room-choice"
@@ -210,8 +237,8 @@
       [(ngModel)]="roomName"
     />
     <datalist id="rooms">
-      <option *ngFor="let room of rooms" value="{{ room.name }}"></option>
+      <option *ngFor="let room of rooms" value="{{ room.room_name }}"></option>
     </datalist>
-    <button class="btn_in" (click)="addNewUser(student)">Add</button>
+    <button class="btn_in" (click)="addNewEvent()">Add</button>
   </div>
 </div>

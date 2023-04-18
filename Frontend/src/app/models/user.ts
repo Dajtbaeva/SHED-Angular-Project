@@ -1,3 +1,6 @@
+// import { IGroup } from "./group";
+// import { IRole } from "./role";
+
 export interface IUser {
   id: number;
   username: string;
@@ -9,3 +12,16 @@ export interface IUser {
   org_id: string;
   group: string | null;
 }
+// export interface IUser {
+//   id: number;
+//   username: string;
+//   name: string;
+//   surname: string;
+//   password: string;
+//   email: string;
+//   role: IRole;
+//   organization: string; // or organization: IOrganization
+//   group: IGroup;
+//   is_active: true;
+//   is_verified: true;
+// }
