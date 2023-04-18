@@ -3,6 +3,6 @@ export interface IEvent {
   event_start_time: number;
   room: string;
   discipline: string;
-  day: string;
+  day: number;
   tutor: string;
 }
