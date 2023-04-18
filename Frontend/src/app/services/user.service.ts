@@ -4,7 +4,6 @@ import { Observable, from } from 'rxjs';
 import { AuthToken } from 'src/app/models/token';
 import { IUser } from '../models/user';
 import { IGroup } from '../models/group';
-import { IDiscipline } from '../models/discipline';
 import { IRoom } from '../models/room';
 import { IEvent } from '../models/event';
 // import { randomBytes } from 'crypto';
@@ -37,16 +36,16 @@ export class UserService {
     surname: string,
     email: string,
     role: string,
-    org_id: string,
+    org_id: string | null,
     group: string | null
   ) {
     const username =
       name[0].toLocaleLowerCase() + '_' + surname.toLocaleLowerCase();
     // const password = this.generatePassword();
     return this.http.post<IUser>(`${this.URL}/user/`, {
+      username,
       name,
       surname,
-      username,
       // password,
       email,
       role,
@@ -61,14 +60,7 @@ export class UserService {
     });
   }
 
-  addNewDiscipline(name: string, tutor: string) {
-    return this.http.post<IDiscipline>(`${this.URL}/discipline/`, {
-      name,
-      tutor,
-    });
-  }
-
-  addNewRoom(name: string, capacity: string) {
+  addNewRoom(name: string, capacity: number) {
     return this.http.post<IRoom>(`${this.URL}/room/`, {
       name,
       capacity,
@@ -107,10 +99,6 @@ export class UserService {
 
   getGroups(): Observable<IGroup[]> {
     return this.http.get<IGroup[]>(`${this.URL}/group/`);
-  }
-
-  getDisciplines(): Observable<IDiscipline[]> {
-    return this.http.get<IDiscipline[]>(`${this.URL}/discipline/`);
   }
 
   getRooms(): Observable<IRoom[]> {
@@ -203,12 +191,6 @@ export class UserService {
 
   deleteGroup(id: number) {
     return fetch(`${this.URL}/group/${id}`, {
-      method: 'DELETE',
-    });
-  }
-
-  deleteDiscipline(id: number) {
-    return fetch(`${this.URL}/discipline/${id}`, {
       method: 'DELETE',
     });
   }

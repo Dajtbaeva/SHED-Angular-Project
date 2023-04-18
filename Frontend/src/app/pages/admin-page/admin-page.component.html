@@ -88,9 +88,9 @@
     <div class="card">
       <div class="name">
         <p>{{ group.name | titlecase }}</p>
-        <div class="details">
-          <button class="delete" (click)="deleteGroup(group)">Delete</button>
-        </div>
+      </div>
+      <div class="details">
+        <button class="delete" (click)="deleteGroup(group)">Delete</button>
       </div>
     </div>
   </div>
@@ -110,57 +110,13 @@
   </div>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 6">
-  <div class="disciplines" *ngFor="let discipline of disciplines">
-    <div class="card">
-      <div class="name">
-        <p>{{ discipline.name | titlecase }}</p>
-        <p>{{ discipline.tutor | titlecase }}</p>
-        <div class="details">
-          <button class="delete" (click)="deleteDiscipline(discipline)">
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="form">
-    <h3>Add new discipline</h3>
-    <p>
-      Enter discipline name
-      <input
-        type="text"
-        [(ngModel)]="disciplineName"
-        id="name"
-        name="name"
-        required
-      />
-    </p>
-    <input
-      list="tutors"
-      data-list="tutors"
-      id="tutor-choice"
-      name="tutor-choice"
-      placeholder="Choose a tutor"
-      [(ngModel)]="addTutor"
-    />
-    <datalist id="tutors">
-      <option
-        *ngFor="let tutor of tutors"
-        value="{{ tutor.name }} {{ tutor.surname }}"
-      ></option>
-    </datalist>
-    <button class="btn_in" (click)="addNewGroup()">Add</button>
-  </div>
-</div>
-<div class="tabcontent" *ngIf="activeTab === 7">
   <div class="rooms" *ngFor="let room of rooms">
     <div class="card">
       <div class="name">
         <p>{{ room.name | titlecase }}</p>
-        <p>{{ room.capacity | titlecase }}</p>
-        <div class="details">
-          <button class="delete" (click)="deleteRoom(room)">Delete</button>
-        </div>
+      </div>
+      <div class="details">
+        <button class="delete" (click)="deleteRoom(room)">Delete</button>
       </div>
     </div>
   </div>
@@ -178,17 +134,26 @@
     </p>
     <p>
       Enter capacity of room
-      <input type="text" [(ngModel)]="roomCap" id="name" name="name" required />
+      <input
+        type="number"
+        [(ngModel)]="roomCap"
+        id="name"
+        name="name"
+        required
+      />
     </p>
     <button class="btn_in" (click)="addNewRoom()">Add</button>
   </div>
 </div>
-<div class="tabcontent" *ngIf="activeTab === 8">
+<div class="tabcontent" *ngIf="activeTab === 7">
   <div class="events" *ngFor="let event of events">
     <div class="card">
       <div class="name">
+        <p>
+          {{ event.event_start_time }}:00- {{ event.event_start_time + 1 }}:00,
+          {{ event.day }}
+        </p>
         <p>{{ event.room | titlecase }}</p>
-        <p>{{ event.event_start_time }} {{ event.day }}</p>
         <p>{{ event.tutor | titlecase }} {{ event.discipline | titlecase }}</p>
       </div>
       <div class="details">
@@ -197,16 +162,31 @@
     </div>
   </div>
 </div>
-<div class="tabcontent" *ngIf="activeTab === 9">
+<div class="tabcontent" *ngIf="activeTab === 8">
   <div class="form">
     <h3>Add new event</h3>
     <p>
       Enter start time
-      <input type="number" [(ngModel)]="addTime" id="time" name="time" required />
+      <input
+        type="number"
+        [(ngModel)]="addTime"
+        id="time"
+        name="time"
+        required
+      />
     </p>
     <p>
       Enter day
       <input type="text" [(ngModel)]="addDay" id="day" name="day" required />
+    </p>
+    <p>
+      Enter name of discipline
+      <input
+        id="discipline"
+        name="discipline"
+        [(ngModel)]="disciplineName"
+        required
+      />
     </p>
     <input
       list="tutors"
@@ -221,16 +201,6 @@
         *ngFor="let tutor of tutors"
         value="{{ tutor.name }} {{ tutor.surname }}"
       ></option>
-    </datalist>
-    <input
-      list="disciplines"
-      id="discipline-choice"
-      name="discipline-choice"
-      placeholder="Choose a discipline"
-      [(ngModel)]="disciplineName"
-    />
-    <datalist id="disciplines">
-      <option *ngFor="let discipline of disciplines" value="{{ discipline.name }}"></option>
     </datalist>
     <input
       list="rooms"

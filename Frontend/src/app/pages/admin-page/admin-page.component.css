@@ -32,7 +32,7 @@
   background-color: #ccc;
 }
 .tabcontent {
-  margin: 50px auto;
+  margin: 80px auto;
   margin-left: 250px;
   width: 70%;
   display: flex;
@@ -101,6 +101,7 @@ input:focus {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
+  width: 600px;
 }
 .card:hover {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -113,6 +114,7 @@ input:focus {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 }
 button {
   background-color: #4f9d55;
