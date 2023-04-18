@@ -1,10 +1,12 @@
 import datetime
-
+import json
 import bcrypt
 import jwt
 from django.conf import settings
 from django.db.models import Model
+from django.http import JsonResponse
 from rest_framework import status
+from rest_framework.decorators import renderer_classes, api_view
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -14,28 +16,60 @@ from django.core.exceptions import ObjectDoesNotExist
 from api.serializers import *
 
 
-# НА ИСПРАВЛЕНИЕ
-# def get_users_events(request, user_id):
-#     events = Participants.objects.get(user_id = user_id)
-#     serializer = EventsSerializer(events)
+# def get_users_events(request):
+#     body_unicode = request.body.decode('utf-8')
+#     body = json.loads(body_unicode)
+#     user_id = body['group_id']
 #
-#     return Response(serializer.data)
+#     # partic = Participants.objects.filter(group=user_id)
+#     events = []
+#     for i in range(1, 8):
+#         for j in range(8, 21):
+#             if not Participants.objects.filter(group__id=user_id, event__event_start_time=j, event__day=i).exists():
+#                 event = {}
+#             else:
+#                 event = Events.objects.get(event_start_time=j, day=i)
+#                 event = EventsSerializer(event).data
+#             events.append(event)
+#     # for i in range(1, 8):
+#     #     for j in range(8, 20):
+#     #         if not Events.objects.filter(event_start_time=j, day=i, group=user.id).exists():
+#     #             my_object = Events(event_start_time=j, day=i)
+#     #             # my_object = Events.objects.create(event_start_time=j, day=i)
+#     #         else:
+#     #             my_object = Events.objects.get(event_start_time=j, day=i, group=user_id.group)
+#     #         events.append(my_object)
 #
-# #fix
+#     # events = Participants.objects.get(user_id=user_id)
 #
-# def get_tutor_events(request, tutor_id):
-#     events = Events.objects.get(tutor_id = tutor_id)
-#
-#     serializer = EventsSerializer(events)
-#
-#     return Response(serializer.data)
-#
-#
-# def get_available_rooms(request, time, day):
-#     events = Events.objects.filter(event_start_time!=time, day!=day)
-#
-#     data = {"tutor events" : list(events.values())}
-#     return Response(data)
+#     return JsonResponse(event, safe=False)
+
+
+@api_view(('GET',))
+def get_available_rooms(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    time = body['time']
+    day = body['day']
+    events = Events.objects.filter(event_start_time=time, day=day)
+    not_aviable_rooms = []
+    if len(events) != 0:
+        for event in events:
+            not_aviable_rooms.append(event.room.id)
+    aviable_rooms = Room.objects.exclude(id__in=not_aviable_rooms)
+    serializer = RoomSerializer(aviable_rooms, many=True)
+    return Response(serializer.data)
+    # for i in range(time, 20):
+    #     if not Events.objects.filter(event_start_time=i, day=day).exists():
+    #         my_object = Events(event_start_time=i, day=day)
+    #         # my_object = Events.objects.create(event_start_time=i, day=day)
+    #         events.append(my_object)
+
+    # if len(events) == 0:
+    #     return Response('message: list is empty')
+    # else:
+    #     serializer = EventsSerializer(events, many=True)
+    #     return JsonResponse(serializer.data, safe=False)
 
 
 class LoginView(APIView):
