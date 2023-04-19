@@ -160,7 +160,7 @@ class UserListAPIView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()
-            return Response(instance.data)
+            return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

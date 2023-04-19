@@ -2,13 +2,17 @@ from rest_framework import serializers
 from api.models import *
 import random
 import string
-def generate_username(name, surname):
-    users = User.objects.filter(User.name == name, User.surname == surname)
-    if len(users) < len(name):
-        result = name[0:len(users) + 1].lower() + "_" + surname.lower()
-    else:
-        result = name[0].lower() + "_" + surname.lower() + str(len(users) - len(name)+1)
-    return result
+
+
+# def generate_username(name, surname):
+#     users = User.objects.filter(User.name == name, User.surname == surname)
+#     if len(users) < len(name):
+#         result = name[0:len(users) + 1].lower() + "_" + surname.lower()
+#     else:
+#         result = name[0].lower() + "_" + surname.lower() + str(len(users) - len(name) + 1)
+#     return result
+
+
 class OrganizationSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=50)
@@ -19,9 +23,10 @@ class RoleSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=50)
 
 
-class GroupSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=50)
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
 
     def create(self, validated_data):
         instance = Group.objects.create(**validated_data)
@@ -29,6 +34,7 @@ class GroupSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name')
+        instance.organization = validated_data.get('organization')
         instance.save()
         return instance
 
@@ -41,7 +47,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        depth = 1
         fields = '__all__'
 
     def create(self, validated_data):
@@ -115,7 +120,7 @@ class EventsSerializer(serializers.ModelSerializer):
         return event
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name')
+        instance.discipline = validated_data.get('discipline')
         instance.event_start_time = validated_data.get('event_start_time')
         instance.room = validated_data.get('room')
         # instance.discipline = validated_data.get('discipline')

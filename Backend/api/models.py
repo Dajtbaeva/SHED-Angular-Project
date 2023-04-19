@@ -19,6 +19,7 @@ class Role(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=50)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     def __str__(self):
         return f'{self.id}: {self.name}'
 
@@ -71,7 +72,7 @@ class Room(models.Model):
 
 
 class Events(models.Model):
-    name = models.CharField(max_length=150)
+    discipline = models.CharField(max_length=150)
     event_start_time = models.IntegerField()
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     # discipline = models.ForeignKey(Disciplines, on_delete=models.CASCADE)
