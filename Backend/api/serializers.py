@@ -39,6 +39,8 @@ class RoleSerializer(serializers.Serializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=False)
+
     class Meta:
         model = Group
         fields = '__all__'
@@ -92,6 +94,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RoomSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=False)
+
     class Meta:
         model = Room
         fields = '__all__'
@@ -129,12 +133,34 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class EventsSerializer(serializers.ModelSerializer):
+    tutor = UserSerializer()
+    room = RoomSerializer()
+    group = GroupSerializer()
+
+    def validate(self, data):
+        print(data.get('day'))
+        if Events.objects.filter(event_start_time=data.get('event_start_time'),
+                                 day=data.get('day'),
+                                 group__id=data.get('group')['id']).exists():
+            raise serializers.ValidationError({"error": "time is not free"})
+
     class Meta:
         model = Events
         fields = '__all__'
-        depth = 1
 
     def create(self, validated_data):
+        tutor_data = validated_data.pop('tutor')
+        tutor = User.objects.get(username=tutor_data['username'])
+        validated_data['tutor'] = tutor
+
+        room_id = validated_data.pop('room').get('id')
+        room = Room.objects.get(id=room_id)
+        validated_data['room'] = room
+
+        group_id = validated_data.pop('group').get('id')
+        group = Group.objects.get(id=group_id)
+        validated_data['group'] = group
+
         event = Events.objects.create(**validated_data)
         return event
 
