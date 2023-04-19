@@ -1,5 +1,5 @@
 from django.contrib import admin
-from api.models import Organization, Role, User, Group, Room, Disciplines, Events, Participants
+from api.models import Organization, Role, User, Group, Room, Events
 
 
 # Register your models here.
@@ -28,19 +28,17 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ['id', 'room_name', 'organization']
+    list_display = ['id', 'name', 'organization']
 
 
-@admin.register(Disciplines)
-class DisciplinesAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'organization', 'tutor']
+# @admin.register(Disciplines)
+# class DisciplinesAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'name', 'organization', 'tutor']
 
 
 @admin.register(Events)
 class EventsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'event_start_time', 'day', 'room', 'discipline', 'tutor']
+    list_display = ['id', 'event_start_time', 'day', 'room', 'tutor']
 
 
-@admin.register(Participants)
-class ParticipantsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'event', 'group']
+

@@ -9,7 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class AvailableRoomsComponent implements OnInit {
   hour = 0;
-  day = '';
+  day = 0;
   rooms: IRoom[] = [];
 
   constructor(private userService: UserService) {}
@@ -17,7 +17,7 @@ export class AvailableRoomsComponent implements OnInit {
   ngOnInit(): void {
     const currentDate = new Date();
     this.hour = currentDate.getHours();
-    this.day = currentDate.getDay().toLocaleString(); // return number
+    this.day = currentDate.getDay(); // return number
     this.userService
       .getAvailableRooms(this.hour, this.day)
       .subscribe((data) => (this.rooms = data));

@@ -121,11 +121,12 @@ export class UserService {
     return this.http.get<IEvent[]>(`${this.URL}/event/`);
   }
 
-  getAvailableRooms(hour: number, day: string): Observable<IRoom[]> {
-    const params = new HttpParams()
-      .set('hour', hour.toString())
-      .set('day', day);
-    return this.http.get<IRoom[]>(`${this.URL}/available_rooms/`, { params });
+  getAvailableRooms(hour: number, day: number): Observable<IRoom[]> {
+    return this.http.get<IRoom[]>(`${this.URL}/available_rooms/?hour=${hour}&day=${day}`);
+    // const params = new HttpParams()
+    //   .set('hour', hour.toString())
+    //   .set('day', day);
+    // return this.http.get<IRoom[]>(`${this.URL}/available_rooms/`, { params });
   }
 
   getUserEvents(user_id: number) {
