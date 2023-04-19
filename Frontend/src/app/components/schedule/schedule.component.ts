@@ -22,10 +22,33 @@ export class ScheduleComponent implements OnInit {
   emptyEvent = {
     id: 0,
     event_start_time: 0,
-    room: '',
+    room: {
+      id: 0,
+      room_name: '',
+      capacity: 0,
+    },
     discipline: '',
     day: 0,
-    tutor: '',
+    tutor: {
+      id: 0,
+      username: '',
+      password: '',
+      name: '',
+      surname: '',
+      email: '',
+      role: {
+        id: 0,
+        name: '',
+      },
+      organization: '',
+      group: {
+        id: 0,
+        name: '',
+        organization: '',
+      },
+      is_active: true,
+      is_verified: true,
+    },
   };
 
   constructor(private userService: UserService) {}

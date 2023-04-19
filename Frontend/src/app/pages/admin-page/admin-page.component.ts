@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IEvent } from 'src/app/models/event';
 import { IGroup } from 'src/app/models/group';
 import { IRoom } from 'src/app/models/room';
+import { IRole } from 'src/app/models/role';
 import { ITab } from 'src/app/models/tab';
 import { IUser } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
@@ -30,7 +31,26 @@ export class AdminPageComponent implements OnInit {
   addSurname = '';
   addEmail = '';
   addGroup = '';
-  addTutor = '';
+  addTutor: IUser = {
+    id: 0,
+    username: '',
+    password: '',
+    name: '',
+    surname: '',
+    email: '',
+    role: {
+      id: 0,
+      name: '',
+    },
+    organization: '',
+    group: {
+      id: 0,
+      name: '',
+      organization: '',
+    },
+    is_active: true,
+    is_verified: true,
+  };
   addTime = 0;
   addDay = '';
   groupName = '';
@@ -44,6 +64,10 @@ export class AdminPageComponent implements OnInit {
     { name: 'Thursday' },
     { name: 'Friday' },
     { name: 'Saturday' },
+  ];
+  roles: IRole[] = [
+    { id: 2, name: 'student' },
+    { id: 3, name: 'tutor' },
   ];
   tutors: IUser[] = [];
   groups: IGroup[] = [];
@@ -126,7 +150,26 @@ export class AdminPageComponent implements OnInit {
       .subscribe(() => {
         this.addTime = 0;
         this.addDay = '';
-        this.addTutor = '';
+        this.addTutor = {
+          id: 0,
+          username: '',
+          password: '',
+          name: '',
+          surname: '',
+          email: '',
+          role: {
+            id: 0,
+            name: '',
+          },
+          organization: '',
+          group: {
+            id: 0,
+            name: '',
+            organization: '',
+          },
+          is_active: true,
+          is_verified: true,
+        };
         this.disciplineName = '';
         this.roomName = '';
       });
