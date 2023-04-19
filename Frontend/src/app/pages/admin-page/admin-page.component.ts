@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { IEvent } from 'src/app/models/event';
 import { IGroup } from 'src/app/models/group';
 import { IRoom } from 'src/app/models/room';
-import { IRole } from 'src/app/models/role';
 import { ITab } from 'src/app/models/tab';
 import { IUser } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
@@ -30,7 +29,13 @@ export class AdminPageComponent implements OnInit {
   addName = '';
   addSurname = '';
   addEmail = '';
-  addGroup = '';
+  addGroup: IGroup = {
+    id: 33,
+    name: '',
+    organization: '',
+  };
+  addTutorGroup = null;
+  role_id = 0;
   addTutor: IUser = {
     id: 0,
     username: '',
@@ -38,23 +43,20 @@ export class AdminPageComponent implements OnInit {
     name: '',
     surname: '',
     email: '',
-    role: {
-      id: 0,
-      name: '',
-    },
-    organization: '',
-    group: {
-      id: 0,
-      name: '',
-      organization: '',
-    },
-    is_active: true,
-    is_verified: true,
+    role: 3,
+    organization: '1',
+    group: null,
   };
   addTime = 0;
   addDay = '';
   groupName = '';
   disciplineName = '';
+  addRoom: IRoom = {
+    id: 0,
+    name: '',
+    capacity: 0,
+    organization: '',
+  };
   roomName = '';
   roomCap = 0;
   days = [
@@ -64,10 +66,6 @@ export class AdminPageComponent implements OnInit {
     { name: 'Thursday' },
     { name: 'Friday' },
     { name: 'Saturday' },
-  ];
-  roles: IRole[] = [
-    { id: 2, name: 'student' },
-    { id: 3, name: 'tutor' },
   ];
   tutors: IUser[] = [];
   groups: IGroup[] = [];
@@ -90,32 +88,54 @@ export class AdminPageComponent implements OnInit {
   }
 
   addNewUser(role: string) {
-    this.userService
-      .addNewUser(
-        this.addName,
-        this.addSurname,
-        this.addEmail,
-        role,
-        this.org_id,
-        this.addGroup
-      )
-      .subscribe(() => {
-        this.addName = '';
-        this.addSurname = '';
-        this.addEmail = '';
-        this.addGroup = '';
-      });
+    this.role_id = role === 'student' ? 2 : 3;
+    if (this.role_id === 3) {
+      this.userService
+        .addNewUser(
+          this.addName,
+          this.addSurname,
+          this.addEmail,
+          this.role_id,
+          this.org_id,
+          this.addTutorGroup
+        )
+        .subscribe(() => {
+          this.addName = '';
+          this.addSurname = '';
+          this.addEmail = '';
+        });
+    } else {
+      const group_id = this.addGroup.id;
+      this.userService
+        .addNewUser(
+          this.addName,
+          this.addSurname,
+          this.addEmail,
+          this.role_id,
+          this.org_id,
+          group_id
+        )
+        .subscribe(() => {
+          this.addName = '';
+          this.addSurname = '';
+          this.addEmail = '';
+          this.addGroup = {
+            id: 0,
+            name: '',
+            organization: '',
+          };
+        });
+    }
   }
 
   addNewGroup() {
-    this.userService.addNewGroup(this.groupName).subscribe(() => {
+    this.userService.addNewGroup(this.groupName, this.org_id).subscribe(() => {
       this.groupName = '';
+      this.userService.getGroups().subscribe((data) => (this.groups = data));
     });
   }
 
   deleteGroup(group: IGroup) {
-    console.log(group);
-    console.log(group.id);
     this.userService.deleteGroup(group.id);
     this.groups = this.groups.filter((g) => g !== group);
   }
@@ -142,10 +162,11 @@ export class AdminPageComponent implements OnInit {
     this.userService
       .addNewEvent(
         this.addTime,
-        this.roomName,
+        this.addRoom,
         this.disciplineName,
         day,
-        this.addTutor
+        this.addTutor,
+        this.addGroup
       )
       .subscribe(() => {
         this.addTime = 0;
@@ -157,21 +178,22 @@ export class AdminPageComponent implements OnInit {
           name: '',
           surname: '',
           email: '',
-          role: {
-            id: 0,
-            name: '',
-          },
-          organization: '',
-          group: {
-            id: 0,
-            name: '',
-            organization: '',
-          },
-          is_active: true,
-          is_verified: true,
+          role: 3,
+          organization: '1',
+          group: null,
         };
         this.disciplineName = '';
-        this.roomName = '';
+        this.addRoom = {
+          id: 0,
+          name: '',
+          capacity: 0,
+          organization: '',
+        };
+        this.addGroup = {
+          id: 0,
+          name: '',
+          organization: '',
+        };
       });
   }
 

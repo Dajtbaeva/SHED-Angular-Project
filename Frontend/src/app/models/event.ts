@@ -1,3 +1,4 @@
+import { IGroup } from "./group";
 import { IRoom } from "./room";
 import { IUser } from "./user";
 
@@ -8,6 +9,7 @@ export interface IEvent {
   discipline: string;
   day: number;
   tutor: IUser;
+  group: IGroup;
 }
 // export interface IEvent {
 //   id: number;

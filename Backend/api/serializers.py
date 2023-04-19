@@ -10,7 +10,7 @@ def send_email(to_email, login, password):
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_PORT = 587
     EMAIL_HOST_USER = 'alibay.tileukhan@gmail.com'
-    EMAIL_HOST_PASSWORD = 'gwiqbdhvjwutfwsb'
+    EMAIL_HOST_PASSWORD = 'xbxgytmyyirrsicw'
 
     # Устанавливаем соединение с SMTP-сервером
     smtp_server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)

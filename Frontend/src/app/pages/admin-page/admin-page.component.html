@@ -76,11 +76,14 @@
       id="group-choice"
       name="group-choice"
       placeholder="Choose a group"
-      [(ngModel)]="addGroup"
+      [(ngModel)]="addGroup.name"
     />
     <datalist id="groups">
-      <option *ngFor="let group of groups" value="{{ group.name }}"></option>
+      <option *ngFor="let group of groups" [ngValue]="group">
+        {{ group.name }}
+      </option>
     </datalist>
+
     <button class="btn_in" (click)="addNewUser(student)">Add</button>
   </div>
 </div>
@@ -211,30 +214,31 @@
       id="tutor-choice"
       name="tutor-choice"
       placeholder="Choose a tutor"
-      [(ngModel)]="addTutor"
+      [(ngModel)]="addTutor.name"
     />
     <datalist id="tutors">
-      <option
-        *ngFor="let tutor of tutors"
-        value="{{ tutor.name }} {{ tutor.surname }}"
-      ></option>
+      <option *ngFor="let tutor of tutors" [ngValue]="tutor">
+        {{ tutor.name }} {{ tutor.surname }}
+      </option>
     </datalist>
     <input
       list="groups"
       id="group-choice"
       name="group-choice"
       placeholder="Choose a group"
-      [(ngModel)]="addGroup"
+      [(ngModel)]="addGroup.name"
     />
     <datalist id="groups">
-      <option *ngFor="let group of groups" value="{{ group.name }}"></option>
+      <option *ngFor="let group of groups" [ngValue]="group">
+        {{ group.name }}
+      </option>
     </datalist>
     <input
       list="rooms"
       id="room-choice"
       name="room-choice"
       placeholder="Choose a room"
-      [(ngModel)]="roomName"
+      [(ngModel)]="addRoom.name"
     />
     <datalist id="rooms">
       <option *ngFor="let room of rooms" value="{{ room.name }}"></option>

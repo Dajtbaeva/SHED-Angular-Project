@@ -1,5 +1,5 @@
-import { IGroup } from './group';
-import { IRole } from './role';
+// import { IGroup } from './group';
+// import { IRole } from './role';
 
 // export interface IUser {
 //   id: number;
@@ -19,9 +19,7 @@ export interface IUser {
   surname: string;
   password: string;
   email: string;
-  role: IRole;
-  organization: string; // or organization: IOrganization
-  group: IGroup;
-  is_active: boolean;
-  is_verified: boolean;
+  role: number;
+  organization: string;
+  group: number | null;
 }
