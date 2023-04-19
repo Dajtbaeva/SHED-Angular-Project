@@ -9,7 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class AvailableRoomsComponent implements OnInit {
   hour = 0;
-  day = '';
+  day = 0;
   rooms: IRoom[] = [];
   invalid = false;
 
@@ -18,16 +18,11 @@ export class AvailableRoomsComponent implements OnInit {
   ngOnInit(): void {
     const currentDate = new Date();
     this.hour = currentDate.getHours();
-    this.day = currentDate.getDay().toLocaleString(); // returns number
-    if (this.hour < 8 && this.hour > 20) {
-      this.invalid = true;
-    } else {
-      this.userService
-        .getAvailableRooms(this.hour, this.day)
-        .subscribe((data) => (this.rooms = data));
-      // 0 -> Sun, 1 -> Mon, 2 -> Tue, 3 -> Wed, 4 -> Thu, 5 -> Fri, 6 -> Sat
-      // console.log(currentDate.getHours().toLocaleString());
-      if (!this.rooms) this.invalid = true;
-    }
+    this.day = currentDate.getDay(); // return number
+    this.userService
+      .getAvailableRooms(this.hour, this.day)
+      .subscribe((data) => (this.rooms = data));
+    // 0 -> Sun, 1 -> Mon, 2 -> Tue, 3 -> Wed, 4 -> Thu, 5 -> Fri, 6 -> Sat
+    // console.log(currentDate.getHours().toLocaleString());
   }
 }

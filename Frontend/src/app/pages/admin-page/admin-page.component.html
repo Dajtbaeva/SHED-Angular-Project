@@ -114,7 +114,7 @@
   <div class="rooms" *ngFor="let room of rooms">
     <div class="card">
       <div class="name">
-        <p>{{ room.room_name | titlecase }} ({{ room.capacity }})</p>
+        <p>{{ room.name | titlecase }} ({{ room.capacity }})</p>
       </div>
       <div class="details">
         <button class="delete" (click)="deleteRoom(room)">Delete</button>
@@ -237,7 +237,7 @@
       [(ngModel)]="roomName"
     />
     <datalist id="rooms">
-      <option *ngFor="let room of rooms" value="{{ room.room_name }}"></option>
+      <option *ngFor="let room of rooms" value="{{ room.name }}"></option>
     </datalist>
     <button class="btn_in" (click)="addNewEvent()">Add</button>
   </div>
