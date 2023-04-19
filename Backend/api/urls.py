@@ -5,7 +5,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 urlpatterns = [
     path('login/', LoginView.as_view()),
     path('group/', GroupListAPIView.as_view()),
-    path('group/<int:group_id>/', GroupDetailAPIView.as_view()),
+    path('group/<int:group_id>', GroupDetailAPIView.as_view()),
     path('user/', UserListAPIView.as_view()),
     path('tutors/', TutorListAPIView.as_view()),
     path('students/', StudentListAPIView.as_view()),
