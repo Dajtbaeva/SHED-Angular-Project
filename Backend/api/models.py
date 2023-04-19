@@ -20,6 +20,7 @@ class Role(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=50)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
     def __str__(self):
         return f'{self.id}: {self.name}'
 
@@ -44,6 +45,14 @@ class User(models.Model):
         salt = bcrypt.gensalt()
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
 
+    def generate_username(self, name, surname):
+        users = User.objects.filter(name=name, surname=surname)
+        if len(users) < len(name):
+            result = name[0:len(users) + 1].lower() + "_" + surname.lower()
+        else:
+            result = name[0].lower() + "_" + surname.lower() + str(len(users) - len(name) + 1)
+        self.username = result
+
     def __str__(self):
         return f'{self.id}: {self.name}, {self.role}, {self.group}, {self.organization}'
 
@@ -52,6 +61,7 @@ class Room(models.Model):
     name = models.CharField(max_length=50)
     capacity = models.IntegerField()
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
     # room_id = mode
 
     def __str__(self):
@@ -87,7 +97,6 @@ class Events(models.Model):
     def __str__(self):
         return f'{self.id}: {self.discipline}, {self.event_start_time}, {self.day}, {self.room}, {self.tutor}'
 
-
 # class Participants(models.Model):
 #     event = models.ForeignKey(Events, on_delete=models.CASCADE)
 #     group = models.ForeignKey(Group, on_delete=models.CASCADE)
@@ -98,4 +107,3 @@ class Events(models.Model):
 #
 #     def __str__(self):
 #         return f'{self.id}: {self.group}, {self.event}'
-
