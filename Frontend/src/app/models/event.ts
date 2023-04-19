@@ -1,8 +1,19 @@
+import { IRoom } from "./room";
+import { IUser } from "./user";
+
 export interface IEvent {
   id: number;
   event_start_time: number;
-  room: string;
+  room: IRoom;
   discipline: string;
   day: number;
-  tutor: string;
+  tutor: IUser;
 }
+// export interface IEvent {
+//   id: number;
+//   event_start_time: number;
+//   room: string;
+//   discipline: string;
+//   day: number;
+//   tutor: string;
+// }
