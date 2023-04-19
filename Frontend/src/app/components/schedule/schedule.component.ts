@@ -24,7 +24,7 @@ export class ScheduleComponent implements OnInit {
     event_start_time: 0,
     room: '',
     discipline: '',
-    day: '',
+    day: 0,
     tutor: '',
   };
 
@@ -46,14 +46,22 @@ export class ScheduleComponent implements OnInit {
       const currentEvents = this.events.filter((event) => {
         return event.event_start_time === item.time;
       });
-      this.weekdays.forEach((weekday) => {
-        const event = currentEvents.find((event) => event.day === weekday);
+      // this.weekdays.forEach((weekday) => {
+      //   const event = currentEvents.find((event) => event.day === weekday);
+      //   if (event) {
+      //     timeEvents.push(event);
+      //   } else {
+      //     timeEvents.push(this.emptyEvent);
+      //   }
+      // });
+      for (let i = 1; i < 7; i++) {
+        const event = currentEvents.find((event) => event.day === i);
         if (event) {
           timeEvents.push(event);
         } else {
           timeEvents.push(this.emptyEvent);
         }
-      });
+      }
       item.events = timeEvents;
     });
     this.shed.forEach((item) =>

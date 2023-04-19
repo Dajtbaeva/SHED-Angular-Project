@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { IDiscipline } from 'src/app/models/discipline';
 import { IEvent } from 'src/app/models/event';
 import { IGroup } from 'src/app/models/group';
 import { IRoom } from 'src/app/models/room';
@@ -19,11 +18,11 @@ export class AdminPageComponent implements OnInit {
     { name: 'Students', num: 3 },
     { name: 'Add new student', num: 4 },
     { name: 'Groups', num: 5 },
-    { name: 'Disciplines', num: 6 },
-    { name: 'Rooms', num: 7 },
-    { name: 'Events', num: 8 },
-    { name: 'Add new event', num: 9 },
+    { name: 'Rooms', num: 6 },
+    { name: 'Events', num: 7 },
+    { name: 'Add new event', num: 8 },
   ];
+  org_id = '';
   tutor = 'tutor';
   student = 'student';
   activeTab = 1;
@@ -37,24 +36,27 @@ export class AdminPageComponent implements OnInit {
   groupName = '';
   disciplineName = '';
   roomName = '';
-  roomCap = '';
+  roomCap = 0;
+  days = [
+    { name: 'Monday' },
+    { name: 'Tuesday' },
+    { name: 'Wednesday' },
+    { name: 'Thursday' },
+    { name: 'Friday' },
+    { name: 'Saturday' },
+  ];
   tutors: IUser[] = [];
   groups: IGroup[] = [];
-  disciplines: IDiscipline[] = [];
-  // rooms: IRoom[] = [
-  //   { id: 1, name: '123', capacity: '20' },
-  //   { id: 2, name: '333', capacity: '30' },
-  // ];
   rooms: IRoom[] = [];
   events: IEvent[] = [];
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
+    const org = localStorage.getItem('org_id');
+    if (org) this.org_id = org;
+    this.userService.getTutors().subscribe((data) => (this.tutors = data));
     this.userService.getGroups().subscribe((data) => (this.groups = data));
-    this.userService
-      .getDisciplines()
-      .subscribe((data) => (this.disciplines = data));
     this.userService.getRooms().subscribe((data) => (this.rooms = data));
     this.userService.getEvents().subscribe((data) => (this.events = data));
   }
@@ -64,15 +66,14 @@ export class AdminPageComponent implements OnInit {
   }
 
   addNewUser(role: string) {
-    const org_id = localStorage.getItem('org_id');
     this.userService
       .addNewUser(
         this.addName,
         this.addSurname,
         this.addEmail,
-        this.addGroup,
         role,
-        org_id
+        this.org_id,
+        this.addGroup
       )
       .subscribe(() => {
         this.addName = '';
@@ -89,29 +90,20 @@ export class AdminPageComponent implements OnInit {
   }
 
   deleteGroup(group: IGroup) {
+    console.log(group);
+    console.log(group.id);
     this.userService.deleteGroup(group.id);
     this.groups = this.groups.filter((g) => g !== group);
   }
 
-  addNewDiscipline() {
-    this.userService
-      .addNewDiscipline(this.disciplineName, this.addTutor)
-      .subscribe(() => {
-        this.disciplineName = '';
-        this.addTutor = '';
-      });
-  }
-
-  deleteDiscipline(discipline: IDiscipline) {
-    this.userService.deleteDiscipline(discipline.id);
-    this.disciplines = this.disciplines.filter((d) => d !== discipline);
-  }
-
   addNewRoom() {
-    this.userService.addNewRoom(this.roomName, this.roomCap).subscribe(() => {
-      this.roomName = '';
-      this.roomCap = '';
-    });
+    this.userService
+      .addNewRoom(this.roomName, this.roomCap, this.org_id)
+      .subscribe(() => {
+        this.roomName = '';
+        this.roomCap = 0;
+        this.userService.getRooms().subscribe((data) => (this.rooms = data));
+      });
   }
 
   deleteRoom(room: IRoom) {
@@ -120,13 +112,16 @@ export class AdminPageComponent implements OnInit {
   }
 
   addNewEvent() {
+    const day =
+      this.days.findIndex((day) => day.name === this.addDay.trim()) + 1;
+    console.log(day);
     this.userService
       .addNewEvent(
         this.addTime,
-        this.addDay,
-        this.addTutor,
+        this.roomName,
         this.disciplineName,
-        this.roomName
+        day,
+        this.addTutor
       )
       .subscribe(() => {
         this.addTime = 0;

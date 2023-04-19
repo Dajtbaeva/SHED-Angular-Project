@@ -11,6 +11,7 @@ export class AvailableRoomsComponent implements OnInit {
   hour = 0;
   day = 0;
   rooms: IRoom[] = [];
+  invalid = false;
 
   constructor(private userService: UserService) {}
 

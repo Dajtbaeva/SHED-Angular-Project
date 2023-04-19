@@ -4,17 +4,15 @@ import { Observable, from } from 'rxjs';
 import { AuthToken } from 'src/app/models/token';
 import { IUser } from '../models/user';
 import { IGroup } from '../models/group';
-import { IDiscipline } from '../models/discipline';
 import { IRoom } from '../models/room';
 import { IEvent } from '../models/event';
-// import { randomBytes } from 'crypto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private URL = 'http://127.0.0.1:8000/api';
-  private readonly PASSWORD_LENGTH = 8;
+  // private readonly PASSWORD_LENGTH = 8;
 
   constructor(private http: HttpClient) {}
 
@@ -37,20 +35,20 @@ export class UserService {
     surname: string,
     email: string,
     role: string,
-    org_id: string,
+    organization: string,
     group: string | null
   ) {
     const username =
       name[0].toLocaleLowerCase() + '_' + surname.toLocaleLowerCase();
     // const password = this.generatePassword();
     return this.http.post<IUser>(`${this.URL}/user/`, {
+      username,
       name,
       surname,
-      username,
       // password,
       email,
       role,
-      organization: org_id,
+      organization,
       group,
     });
   }
@@ -61,32 +59,26 @@ export class UserService {
     });
   }
 
-  addNewDiscipline(name: string, tutor: string) {
-    return this.http.post<IDiscipline>(`${this.URL}/discipline/`, {
-      name,
-      tutor,
-    });
-  }
-
-  addNewRoom(name: string, capacity: string) {
+  addNewRoom(room_name: string, capacity: number, organization: string) {
     return this.http.post<IRoom>(`${this.URL}/room/`, {
-      name,
+      room_name,
       capacity,
+      organization,
     });
   }
 
   addNewEvent(
     addTime: number,
-    addDay: string,
-    addTutor: string,
+    roomName: string,
     disciplineName: string,
-    roomName: string
+    day: number,
+    addTutor: string
   ) {
     return this.http.post<IEvent>(`${this.URL}/event/`, {
       addTime,
       roomName,
       disciplineName,
-      addDay,
+      day,
       addTutor,
     });
   }
@@ -107,10 +99,6 @@ export class UserService {
 
   getGroups(): Observable<IGroup[]> {
     return this.http.get<IGroup[]>(`${this.URL}/group/`);
-  }
-
-  getDisciplines(): Observable<IDiscipline[]> {
-    return this.http.get<IDiscipline[]>(`${this.URL}/discipline/`);
   }
 
   getRooms(): Observable<IRoom[]> {
@@ -137,7 +125,7 @@ export class UserService {
         event_start_time: 8,
         room: '123',
         discipline: 'Math',
-        day: 'monday',
+        day: 1,
         tutor: 'tutorName1',
       },
       {
@@ -145,7 +133,7 @@ export class UserService {
         event_start_time: 10,
         room: '78',
         discipline: 'Biology',
-        day: 'tuesday',
+        day: 2,
         tutor: 'tutorName3',
       },
       {
@@ -153,7 +141,7 @@ export class UserService {
         event_start_time: 10,
         room: '555',
         discipline: 'Music',
-        day: 'thursday',
+        day: 4,
         tutor: 'tutorName5',
       },
       {
@@ -161,7 +149,7 @@ export class UserService {
         event_start_time: 15,
         room: '1',
         discipline: 'Physics',
-        day: 'friday',
+        day: 5,
         tutor: 'tutorName4',
       },
       {
@@ -169,7 +157,7 @@ export class UserService {
         event_start_time: 17,
         room: '90',
         discipline: 'English',
-        day: 'monday',
+        day: 1,
         tutor: 'tutorName2',
       },
     ];
@@ -204,12 +192,6 @@ export class UserService {
 
   deleteGroup(id: number) {
     return fetch(`${this.URL}/group/${id}`, {
-      method: 'DELETE',
-    });
-  }
-
-  deleteDiscipline(id: number) {
-    return fetch(`${this.URL}/discipline/${id}`, {
       method: 'DELETE',
     });
   }
