@@ -41,21 +41,18 @@ def get_tutor_events(request):
 
 
 def get_users_events(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    user_id = body['group_id']
+    user = User.objects.get(id=request.GET.get('user_id', None))
+    user_id = user.group.id
+    # events = Events.objects.filter(group__id=user_id).order_by('-day').order_by('-event_start_time')
+    # serializer = EventsSerializer(events)
 
     events = []
-    for i in range(1, 8):
-        for j in range(8, 20):
-            if not Events.objects.filter(event_start_time=j, day=i, group__id=user_id).exists():
-                my_object = {}
-                # my_object = Events.objects.create(event_start_time=j, day=i)
-            else:
+    for i in range(1, 7):
+        for j in range(8, 21):
+            if Events.objects.filter(event_start_time=j, day=i, group__id=user_id).exists():
                 my_object = Events.objects.get(event_start_time=j, day=i, group__id=user_id)
                 my_object = EventsSerializer(my_object).data
-            events.append(my_object)
-
+                events.append(my_object)
     return JsonResponse(events, safe=False)
 
 
@@ -159,7 +156,7 @@ class UserListAPIView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            instance = serializer.save()
+            serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

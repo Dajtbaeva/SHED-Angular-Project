@@ -1,16 +1,31 @@
+import smtplib
+
 from rest_framework import serializers
 from api.models import *
 import random
 import string
 
 
-# def generate_username(name, surname):
-#     users = User.objects.filter(User.name == name, User.surname == surname)
-#     if len(users) < len(name):
-#         result = name[0:len(users) + 1].lower() + "_" + surname.lower()
-#     else:
-#         result = name[0].lower() + "_" + surname.lower() + str(len(users) - len(name) + 1)
-#     return result
+def send_email(to_email, login, password):
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = 'alibay.tileukhan@gmail.com'
+    EMAIL_HOST_PASSWORD = 'gwiqbdhvjwutfwsb'
+
+    # Устанавливаем соединение с SMTP-сервером
+    smtp_server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
+    smtp_server.starttls()
+    smtp_server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
+
+    # Отправляем письмо
+    from_email = 'alibay.tileukhan@gmail.com'
+    # to_email = 'dajtbaeva@gmail.com'
+    message = "You were registered to platform SHED!\n" \
+              f"Your username: {login}\n" \
+              f"Your password: {password}"
+    subject = "SHED_Registration"
+    msg = f'Subject: {subject}\n\n{message}'
+    smtp_server.sendmail(from_email, to_email, msg)
 
 
 class OrganizationSerializer(serializers.Serializer):
@@ -44,6 +59,7 @@ class UserSerializer(serializers.ModelSerializer):
     # role = RoleSerializer()
     # group = GroupSerializer()
     password = serializers.CharField(required=False)
+    username = serializers.CharField(required=False)
 
     class Meta:
         model = User
@@ -51,9 +67,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        print(validated_data)
         instance = self.Meta.model(**validated_data)
+        instance.generate_username(instance.name, instance.surname)
         if password is not None:
             instance.set_password(password)
+        send_email(instance.email, instance.username, password)
         instance.save()
         return instance
 
