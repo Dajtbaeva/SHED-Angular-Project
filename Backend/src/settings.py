@@ -16,6 +16,11 @@ from django.conf import settings
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'alibay.tileukhan@gmail.com'
+EMAIL_HOST_PASSWORD = 'xbxgytmyyirrsicw'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -26,6 +31,8 @@ SECRET_KEY = 'django-insecure-32-je@vqq8*+rbg0m$f%tpclxmt3@zriy75nz82(2*5@4zh=zq
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+#AUTH_USER_MODEL = 'api.User'
 
 # Application definition
 
