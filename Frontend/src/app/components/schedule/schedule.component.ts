@@ -24,8 +24,9 @@ export class ScheduleComponent implements OnInit {
     event_start_time: 0,
     room: {
       id: 0,
-      room_name: '',
+      name: '',
       capacity: 0,
+      organization: '',
     },
     discipline: '',
     day: 0,
@@ -36,18 +37,14 @@ export class ScheduleComponent implements OnInit {
       name: '',
       surname: '',
       email: '',
-      role: {
-        id: 0,
-        name: '',
-      },
+      role: 3,
       organization: '',
-      group: {
-        id: 0,
-        name: '',
-        organization: '',
-      },
-      is_active: true,
-      is_verified: true,
+      group: null,
+    },
+    group: {
+      id: 0,
+      name: '',
+      organization: '',
     },
   };
 
@@ -55,10 +52,10 @@ export class ScheduleComponent implements OnInit {
 
   ngOnInit(): void {
     const id = localStorage.getItem('user_id');
-    this.events = this.userService.getUserEvents(Number(id));
-    // this.userService
-    //   .getUserEvents(Number(id))
-    //   .subscribe((data) => (this.events = data));
+    // this.events = this.userService.getUserEvents(Number(id));
+    this.userService
+      .getUserEvents(Number(id))
+      .subscribe((data) => (this.events = data));
     let j = 0;
     for (let i = 8; i < 21; i++) {
       this.shed.push({ id: j, time: i, events: [] });
