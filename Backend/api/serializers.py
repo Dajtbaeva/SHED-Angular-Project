@@ -112,52 +112,39 @@ class RoomSerializer(serializers.ModelSerializer):
         return instance
 
 
-# class DisciplinesSerializer(serializers.ModelSerializer):
-#     organization = OrganizationSerializer(read_only=True)
-#     tutor = UserSerializer(read_only=True)
-#
-#     class Meta:
-#         model = Disciplines
-#         fields = '__all__'
-#
-#     def create(self, validated_data):
-#         discipline = Disciplines.objects.create(**validated_data)
-#         return discipline
-#
-#     def update(self, instance, validated_data):
-#         instance.organization = validated_data.get('organization')
-#         instance.tutor = validated_data.get('tutor')
-#         instance.name = validated_data.get('name')
-#         instance.save()
-#         return instance
-
-
 class EventsSerializer(serializers.ModelSerializer):
-    tutor = UserSerializer()
-    room = RoomSerializer()
-    group = GroupSerializer()
+    tutor = UserSerializer(read_only=True)
+    room = RoomSerializer(read_only=True)
+    group = GroupSerializer(read_only=True)
+
+    tutor_id = serializers.IntegerField(write_only=True)
+    room_id = serializers.IntegerField(write_only=True)
+    group_id = serializers.IntegerField(write_only=True)
 
     def validate(self, data):
-        print(data.get('day'))
+        print(data)
         if Events.objects.filter(event_start_time=data.get('event_start_time'),
                                  day=data.get('day'),
-                                 group__id=data.get('group')['id']).exists():
+                                 group__id=data.get('group_id')).exists():
             raise serializers.ValidationError({"error": "time is not free"})
+        return data
 
     class Meta:
         model = Events
         fields = '__all__'
+        depth = 1
 
     def create(self, validated_data):
-        tutor_data = validated_data.pop('tutor')
-        tutor = User.objects.get(username=tutor_data['username'])
+        print(validated_data)
+        tutor_data = validated_data.pop('tutor_id')
+        tutor = User.objects.get(id=tutor_data)
         validated_data['tutor'] = tutor
 
-        room_id = validated_data.pop('room').get('id')
+        room_id = validated_data.pop('room_id')
         room = Room.objects.get(id=room_id)
         validated_data['room'] = room
 
-        group_id = validated_data.pop('group').get('id')
+        group_id = validated_data.pop('group_id')
         group = Group.objects.get(id=group_id)
         validated_data['group'] = group
 
@@ -167,11 +154,19 @@ class EventsSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.discipline = validated_data.get('discipline')
         instance.event_start_time = validated_data.get('event_start_time')
-        instance.room = validated_data.get('room')
-        # instance.discipline = validated_data.get('discipline')
         instance.day = validated_data.get('day')
-        instance.tutor = validated_data.get('tutor')
-        instance.group = validated_data.get('group')
+
+        room_id = validated_data.pop('room_id')
+        room = Room.objects.get(id=room_id)
+        instance.room = room
+
+        tutor_data = validated_data.pop('tutor_id')
+        tutor = User.objects.get(id=tutor_data)
+        instance.tutor = tutor
+
+        group_id = validated_data.pop('group_id')
+        group = Group.objects.get(id=group_id)
+        instance.group = group
         instance.save()
         return instance
 
