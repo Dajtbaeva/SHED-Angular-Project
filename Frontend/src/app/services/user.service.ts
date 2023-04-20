@@ -117,8 +117,7 @@ export class UserService {
   }
 
   getUserEvents(user_id: number): Observable<IEvent[]> {
-    alert(`It is current user's id ${user_id}`);
-    return this.http.get<IEvent[]>(`${this.URL}/get_user_events/${user_id}`);
+    return this.http.get<IEvent[]>(`${this.URL}/student/${user_id}/events`);
     // return [
     // {
     //   id: 1,
