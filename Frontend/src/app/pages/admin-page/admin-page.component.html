@@ -154,11 +154,10 @@
     <div class="card">
       <div class="name">
         <p>
-          {{ event.event_start_time }}:00- {{ event.event_start_time + 1 }}:00,
-          {{ event.day }}
+          {{ event.discipline | titlecase }} {{ event.event_start_time }}:00 -
+          {{ event.event_start_time + 1 }}:00, {{ days[event.day].name }},
+          {{ event.tutor.name }} {{ event.tutor.surname }}
         </p>
-        <!-- <p>{{ event.room | titlecase }}</p>
-        <p>{{ event.tutor | titlecase }} {{ event.discipline | titlecase }}</p> -->
       </div>
       <div class="details">
         <button class="delete" (click)="deleteEvent(event)">Delete</button>
@@ -214,10 +213,10 @@
       id="tutor-choice"
       name="tutor-choice"
       placeholder="Choose a tutor"
-      [(ngModel)]="addTutor.name"
+      [(ngModel)]="addTutorId"
     />
     <datalist id="tutors">
-      <option *ngFor="let tutor of tutors" [value]="tutor">
+      <option *ngFor="let tutor of tutors" [value]="tutor.id">
         {{ tutor.name }} {{ tutor.surname }}
       </option>
     </datalist>
@@ -226,10 +225,10 @@
       id="group-choice"
       name="group-choice"
       placeholder="Choose a group"
-      [(ngModel)]="addGroup.name"
+      [(ngModel)]="addGroupId"
     />
     <datalist id="groups">
-      <option *ngFor="let group of groups" [value]="group.name">
+      <option *ngFor="let group of groups" [value]="group.id">
         {{ group.name }}
       </option>
     </datalist>
@@ -238,10 +237,12 @@
       id="room-choice"
       name="room-choice"
       placeholder="Choose a room"
-      [(ngModel)]="addRoom.name"
+      [(ngModel)]="addRoomId"
     />
     <datalist id="rooms">
-      <option *ngFor="let room of rooms" value="{{ room.name }}"></option>
+      <option *ngFor="let room of rooms" [value]="room.id">
+        {{ room.name }}
+      </option>
     </datalist>
     <button class="btn_in" (click)="addNewEvent()">Add</button>
   </div>

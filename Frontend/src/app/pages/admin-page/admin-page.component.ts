@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IEvent } from 'src/app/models/event';
 import { IGroup } from 'src/app/models/group';
 import { IRoom } from 'src/app/models/room';
@@ -30,6 +30,8 @@ export class AdminPageComponent implements OnInit {
   addSurname = '';
   addEmail = '';
   addGroupId = '';
+  addTutorId = '';
+  addRoomId = '';
   addGroup: IGroup = {
     id: 33,
     name: '',
@@ -158,11 +160,11 @@ export class AdminPageComponent implements OnInit {
     this.userService
       .addNewEvent(
         this.addTime,
-        this.addRoom,
+        Number(this.addRoomId),
         this.disciplineName,
         day,
-        this.addTutor,
-        this.addGroup
+        Number(this.addTutorId),
+        Number(this.addGroupId)
       )
       .subscribe(() => {
         this.addTime = 0;
