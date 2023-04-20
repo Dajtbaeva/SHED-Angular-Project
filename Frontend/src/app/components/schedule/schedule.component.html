@@ -3,18 +3,22 @@
   <table>
     <tr>
       <th>hour / day</th>
-      <th>Mon</th>
-      <th>Tue</th>
-      <th>Wed</th>
-      <th>Thu</th>
-      <th>Fri</th>
-      <th>Sat</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+      <th>Saturday</th>
     </tr>
     <tr *ngFor="let item of shed">
       <th>{{ item.time }}:00 - {{ item.time + 1 }}:00</th>
       <td *ngFor="let event of item.events">
-        <p *ngIf="event.event_start_time">
-          {{ event.discipline }}, {{ event.tutor.name }}, {{ event.room.name }}
+        <p
+          *ngIf="event.event_start_time"
+          [ngClass]="{ active: event.event_start_time }"
+        >
+          {{ event.discipline | titlecase }}, {{ event.tutor.name }}
+          {{ event.tutor.surname }}, ({{ event.room.name }})
         </p>
       </td>
     </tr>

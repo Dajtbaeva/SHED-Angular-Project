@@ -96,14 +96,3 @@ class Events(models.Model):
 
     def __str__(self):
         return f'{self.id}: {self.discipline}, {self.event_start_time}, {self.day}, {self.room.name}, {self.tutor}'
-
-# class Participants(models.Model):
-#     event = models.ForeignKey(Events, on_delete=models.CASCADE)
-#     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-#
-#     class Meta:
-#         verbose_name = 'Participant'
-#         verbose_name_plural = 'Participants'
-#
-#     def __str__(self):
-#         return f'{self.id}: {self.group}, {self.event}'

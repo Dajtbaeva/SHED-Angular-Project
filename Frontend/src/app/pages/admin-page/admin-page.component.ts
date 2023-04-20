@@ -22,6 +22,7 @@ export class AdminPageComponent implements OnInit {
     { name: 'Events', num: 7 },
     { name: 'Add new event', num: 8 },
   ];
+  is_loading = false;
   org_id = '';
   tutor = 'tutor';
   student = 'student';
@@ -84,7 +85,9 @@ export class AdminPageComponent implements OnInit {
           this.addName = '';
           this.addSurname = '';
           this.addEmail = '';
-          this.userService.getTutors().subscribe((data) => (this.tutors = data));
+          this.userService
+            .getTutors()
+            .subscribe((data) => (this.tutors = data));
         });
     } else {
       this.userService
@@ -148,8 +151,7 @@ export class AdminPageComponent implements OnInit {
       .subscribe(() => {
         this.addTime = 0;
         this.addDay = '';
-        this.addTutorId = '',
-        this.disciplineName = '';
+        (this.addTutorId = ''), (this.disciplineName = '');
         this.addRoomId = '';
         this.addGroupId = '';
         this.userService.getEvents().subscribe((data) => (this.events = data));

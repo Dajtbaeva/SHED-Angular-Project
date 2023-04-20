@@ -33,7 +33,7 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(Events)
 class EventsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'event_start_time', 'day', 'room', 'tutor', 'group']
+    list_display = ['id', 'discipline', 'event_start_time', 'day', 'room', 'tutor', 'group']
 
 
 

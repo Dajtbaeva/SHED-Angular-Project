@@ -11,14 +11,6 @@ import { UserService } from 'src/app/services/user.service';
 export class ScheduleComponent implements OnInit {
   shed: IShed[] = [];
   events: IEvent[] = [];
-  weekdays = [
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-    'saturday',
-  ];
   emptyEvent = {
     id: 0,
     event_start_time: 0,
@@ -50,42 +42,59 @@ export class ScheduleComponent implements OnInit {
 
   constructor(private userService: UserService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const id = localStorage.getItem('user_id');
-    // this.events = this.userService.getUserEvents(Number(id));
-    this.userService
-      .getUserEvents(Number(id))
-      .subscribe((data) => (this.events = data));
+    const role = localStorage.getItem('role');
+    if (role === 'student') {
+      try {
+        // еxecuting an HTTP request and waiting for a response using await
+        const data = await this.userService
+          .getStudentEvents(Number(id))
+          .toPromise();
+        if (data !== undefined) {
+          this.events = data;
+          console.log(this.events);
+        } else {
+          console.error('Error: data is undefined');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      try {
+        const data = await this.userService
+          .getTutorEvents(Number(id))
+          .toPromise();
+        if (data !== undefined) {
+          this.events = data;
+        } else {
+          console.error('Error: data is undefined');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    this.buildSchedule();
+  }
+
+  buildSchedule() {
     let j = 0;
-    for (let i = 8; i < 21; i++) {
+    for (let i = 8; i < 20; i++) {
       this.shed.push({ id: j, time: i, events: [] });
       j++;
     }
     this.shed.forEach((item) => {
       const timeEvents: IEvent[] = [];
       const currentEvents = this.events.filter((event) => {
-        return event.event_start_time === item.time;
+        return item.time === event.event_start_time;
       });
-      // this.weekdays.forEach((weekday) => {
-      //   const event = currentEvents.find((event) => event.day === weekday);
-      //   if (event) {
-      //     timeEvents.push(event);
-      //   } else {
-      //     timeEvents.push(this.emptyEvent);
-      //   }
-      // });
+      console.log(item.time);
+      console.log(currentEvents);
       for (let i = 1; i < 7; i++) {
         const event = currentEvents.find((event) => event.day === i);
-        if (event) {
-          timeEvents.push(event);
-        } else {
-          timeEvents.push(this.emptyEvent);
-        }
+        timeEvents.push(event ? event : this.emptyEvent);
       }
       item.events = timeEvents;
     });
-    this.shed.forEach((item) =>
-      console.log(item.id + ', ' + item.time + ', ' + item.events)
-    );
   }
 }

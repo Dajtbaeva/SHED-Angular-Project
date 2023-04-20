@@ -1,14 +1,17 @@
 <h3>Available rooms</h3>
 <div class="content">
-  <div class="invalid-time" *ngIf="invalid">
-    <h2>Unfortunately, we haven't available rooms now!</h2>
-  </div>
-  <div *ngIf="!invalid">
-    <div class="rooms" *ngFor="let room of rooms">
-      <div class="card">
-        <div class="name">
-          <p>{{ room.name | titlecase }}</p>
-          <p>{{ room.capacity }}</p>
+  <p *ngIf="is_loading">Loading...</p>
+  <div>
+    <div class="invalid-time" *ngIf="invalid">
+      <h2>Unfortunately, we haven't available rooms now!</h2>
+    </div>
+    <div *ngIf="!invalid">
+      <div class="rooms" *ngFor="let room of rooms">
+        <div class="card">
+          <div class="name">
+            <p>{{ room.name | titlecase }}</p>
+            <p>{{ room.capacity }}</p>
+          </div>
         </div>
       </div>
     </div>
