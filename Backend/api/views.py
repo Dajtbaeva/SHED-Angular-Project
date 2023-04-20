@@ -22,10 +22,14 @@ def get_roles(request):
     return JsonResponse('',safe=False)
 
 
-def get_tutor_events(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    user_id = body['user_id']
+def get_tutor_events(request, user_id):
+    user = User.objects.get(id=user_id)
+    # user = User.objects.get(id=request.GET.get('user_id', None))
+
+    user_id = user.group.id
+    # body_unicode = request.body.decode('utf-8')
+    # body = json.loads(body_unicode)
+    # user_id = body['user_id']
     events = []
     for i in range(1, 8):
         for j in range(8, 20):
