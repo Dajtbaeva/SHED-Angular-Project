@@ -64,19 +64,19 @@ export class UserService {
 
   addNewEvent(
     event_start_time: number,
-    room: IRoom,
+    room_id: number,
     discipline: string,
     day: number,
-    tutor: IUser,
-    group: IGroup
+    tutor_id: number,
+    group_id: number
   ) {
     return this.http.post<IEvent>(`${this.URL}/event/`, {
       event_start_time,
-      room,
+      room_id,
       discipline,
       day,
-      tutor,
-      group,
+      tutor_id,
+      group_id,
     });
   }
 
