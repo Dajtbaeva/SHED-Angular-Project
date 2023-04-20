@@ -19,10 +19,14 @@ export class AvailableRoomsComponent implements OnInit {
     const currentDate = new Date();
     this.hour = currentDate.getHours();
     this.day = currentDate.getDay(); // return number
-    this.userService
-      .getAvailableRooms(this.hour, this.day)
-      .subscribe((data) => (this.rooms = data));
-    // 0 -> Sun, 1 -> Mon, 2 -> Tue, 3 -> Wed, 4 -> Thu, 5 -> Fri, 6 -> Sat
-    // console.log(currentDate.getHours().toLocaleString());
+    if (this.hour > 7 && this.hour < 21 && this.day !== 0) {
+      this.userService
+        .getAvailableRooms(this.hour, this.day)
+        .subscribe((data) => (this.rooms = data));
+      // 0 -> Sun, 1 -> Mon, 2 -> Tue, 3 -> Wed, 4 -> Thu, 5 -> Fri, 6 -> Sat
+      // console.log(currentDate.getHours().toLocaleString());
+    } else {
+      this.invalid = true;
+    }
   }
 }

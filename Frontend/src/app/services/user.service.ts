@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { AuthToken } from 'src/app/models/token';
@@ -12,7 +12,6 @@ import { IEvent } from '../models/event';
 })
 export class UserService {
   private URL = 'http://127.0.0.1:8000/api';
-  // private readonly PASSWORD_LENGTH = 8;
 
   constructor(private http: HttpClient) {}
 
@@ -34,18 +33,13 @@ export class UserService {
     name: string,
     surname: string,
     email: string,
-    role: string,
+    role: number,
     organization: string,
-    group: string | null
+    group: number | null
   ) {
-    const username =
-      name[0].toLocaleLowerCase() + '_' + surname.toLocaleLowerCase();
-    // const password = this.generatePassword();
     return this.http.post<IUser>(`${this.URL}/user/`, {
-      username,
       name,
       surname,
-      // password,
       email,
       role,
       organization,
@@ -53,33 +47,36 @@ export class UserService {
     });
   }
 
-  addNewGroup(name: string) {
+  addNewGroup(name: string, organization: string) {
     return this.http.post<IGroup>(`${this.URL}/group/`, {
       name,
+      organization,
     });
   }
 
-  addNewRoom(room_name: string, capacity: number, organization: string) {
+  addNewRoom(name: string, capacity: number, organization: string) {
     return this.http.post<IRoom>(`${this.URL}/room/`, {
-      room_name,
+      name,
       capacity,
       organization,
     });
   }
 
   addNewEvent(
-    addTime: number,
-    roomName: string,
-    disciplineName: string,
+    event_start_time: number,
+    room_id: number,
+    discipline: string,
     day: number,
-    addTutor: IUser
+    tutor_id: number,
+    group_id: number
   ) {
     return this.http.post<IEvent>(`${this.URL}/event/`, {
-      addTime,
-      roomName,
-      disciplineName,
+      event_start_time,
+      room_id,
+      discipline,
       day,
-      addTutor,
+      tutor_id,
+      group_id,
     });
   }
 
@@ -110,172 +107,175 @@ export class UserService {
   }
 
   getAvailableRooms(hour: number, day: number): Observable<IRoom[]> {
-    return this.http.get<IRoom[]>(`${this.URL}/available_rooms/?hour=${hour}&day=${day}`);
+    return this.http.get<IRoom[]>(
+      `${this.URL}/available_rooms/?hour=${hour}&day=${day}`
+    );
     // const params = new HttpParams()
     //   .set('hour', hour.toString())
     //   .set('day', day);
     // return this.http.get<IRoom[]>(`${this.URL}/available_rooms/`, { params });
   }
 
-  getUserEvents(user_id: number) {
+  getUserEvents(user_id: number): Observable<IEvent[]> {
     alert(`It is current user's id ${user_id}`);
-    return [
-      {
-        id: 1,
-        event_start_time: 8,
-        room: {
-          id: 1,
-          room_name: '228',
-          capacity: 34,
-        },
-        discipline: 'Math',
-        day: 1,
-        tutor: {
-          id: 1,
-          username: 'cfcf',
-          password: '4e4e4',
-          name: '3dede',
-          surname: 'rrrrr',
-          email: 'dedede',
-          role: {
-            id: 1,
-            name: 'tutor',
-          },
-          organization: 'test',
-          group: {
-            id: 0,
-            name: 'mat-fiz',
-            organization: 'dostyk',
-          },
-          is_active: true,
-          is_verified: true,
-        },
-      },
-      {
-        id: 3,
-        event_start_time: 10,
-        room: {
-          id: 2,
-          room_name: '78',
-          capacity: 78,
-        },
-        discipline: 'Biology',
-        day: 2,
-        tutor: {
-          id: 2,
-          username: 'cfcf',
-          password: '4e4e4',
-          name: 'Tutor2',
-          surname: 'R',
-          email: 'dedede',
-          role: {
-            id: 1,
-            name: 'tutor',
-          },
-          organization: 'test',
-          group: {
-            id: 0,
-            name: 'mat-fiz-1',
-            organization: 'dostyk',
-          },
-          is_active: true,
-          is_verified: true,
-        },
-      },
-      {
-        id: 5,
-        event_start_time: 10,
-        room: {
-          id: 2,
-          room_name: '555',
-          capacity: 78,
-        },
-        discipline: 'Physics',
-        day: 4,
-        tutor: {
-          id: 3,
-          username: 'cfcf',
-          password: '4e4e4',
-          name: 'Tutor3',
-          surname: 'R',
-          email: 'dedede',
-          role: {
-            id: 1,
-            name: 'tutor',
-          },
-          organization: 'test',
-          group: {
-            id: 0,
-            name: 'mat-fiz-1',
-            organization: 'dostyk',
-          },
-          is_active: true,
-          is_verified: true,
-        },
-      },
-      {
-        id: 4,
-        event_start_time: 15,
-        room: {
-          id: 3,
-          room_name: '23',
-          capacity: 78,
-        },
-        discipline: 'Musics',
-        day: 5,
-        tutor: {
-          id: 3,
-          username: 'cfcf',
-          password: '4e4e4',
-          name: 'Tutor4',
-          surname: 'R',
-          email: 'dedede',
-          role: {
-            id: 1,
-            name: 'tutor',
-          },
-          organization: 'test',
-          group: {
-            id: 0,
-            name: 'mat-fiz-1',
-            organization: 'dostyk',
-          },
-          is_active: true,
-          is_verified: true,
-        },
-      },
-      {
-        id: 2,
-        event_start_time: 17,
-        room: {
-          id: 3,
-          room_name: '90',
-          capacity: 78,
-        },
-        discipline: 'Physics II',
-        day: 1,
-        tutor: {
-          id: 3,
-          username: 'cfcf',
-          password: '4e4e4',
-          name: 'Tutor5',
-          surname: 'R',
-          email: 'dedede',
-          role: {
-            id: 1,
-            name: 'tutor',
-          },
-          organization: 'test',
-          group: {
-            id: 0,
-            name: 'mat-fiz-1',
-            organization: 'dostyk',
-          },
-          is_active: true,
-          is_verified: true,
-        },
-      },
-    ];
+    return this.http.get<IEvent[]>(`${this.URL}/get_user_events/${user_id}`);
+    // return [
+    // {
+    //   id: 1,
+    //   event_start_time: 8,
+    //   room: {
+    //     id: 1,
+    //     name: '228',
+    //     capacity: 34,
+    //   },
+    //   discipline: 'Math',
+    //   day: 1,
+    //   tutor: {
+    //     id: 1,
+    //     username: 'cfcf',
+    //     password: '4e4e4',
+    //     name: '3dede',
+    //     surname: 'rrrrr',
+    //     email: 'dedede',
+    //     role: {
+    //       id: 1,
+    //       name: 'tutor',
+    //     },
+    //     organization: 'test',
+    //     group: {
+    //       id: 0,
+    //       name: 'mat-fiz',
+    //       organization: 'dostyk',
+    //     },
+    //     is_active: true,
+    //     is_verified: true,
+    //   },
+    // },
+    // {
+    //   id: 3,
+    //   event_start_time: 10,
+    //   room: {
+    //     id: 2,
+    //     name: '78',
+    //     capacity: 78,
+    //   },
+    //   discipline: 'Biology',
+    //   day: 2,
+    //   tutor: {
+    //     id: 2,
+    //     username: 'cfcf',
+    //     password: '4e4e4',
+    //     name: 'Tutor2',
+    //     surname: 'R',
+    //     email: 'dedede',
+    //     role: {
+    //       id: 1,
+    //       name: 'tutor',
+    //     },
+    //     organization: 'test',
+    //     group: {
+    //       id: 0,
+    //       name: 'mat-fiz-1',
+    //       organization: 'dostyk',
+    //     },
+    //     is_active: true,
+    //     is_verified: true,
+    //   },
+    // },
+    // {
+    //   id: 5,
+    //   event_start_time: 10,
+    //   room: {
+    //     id: 2,
+    //     name: '555',
+    //     capacity: 78,
+    //   },
+    //   discipline: 'Physics',
+    //   day: 4,
+    //   tutor: {
+    //     id: 3,
+    //     username: 'cfcf',
+    //     password: '4e4e4',
+    //     name: 'Tutor3',
+    //     surname: 'R',
+    //     email: 'dedede',
+    //     role: {
+    //       id: 1,
+    //       name: 'tutor',
+    //     },
+    //     organization: 'test',
+    //     group: {
+    //       id: 0,
+    //       name: 'mat-fiz-1',
+    //       organization: 'dostyk',
+    //     },
+    //     is_active: true,
+    //     is_verified: true,
+    //   },
+    // },
+    // {
+    //   id: 4,
+    //   event_start_time: 15,
+    //   room: {
+    //     id: 3,
+    //     name: '23',
+    //     capacity: 78,
+    //   },
+    //   discipline: 'Musics',
+    //   day: 5,
+    //   tutor: {
+    //     id: 3,
+    //     username: 'cfcf',
+    //     password: '4e4e4',
+    //     name: 'Tutor4',
+    //     surname: 'R',
+    //     email: 'dedede',
+    //     role: {
+    //       id: 1,
+    //       name: 'tutor',
+    //     },
+    //     organization: 'test',
+    //     group: {
+    //       id: 0,
+    //       name: 'mat-fiz-1',
+    //       organization: 'dostyk',
+    //     },
+    //     is_active: true,
+    //     is_verified: true,
+    //   },
+    // },
+    // {
+    //   id: 2,
+    //   event_start_time: 17,
+    //   room: {
+    //     id: 3,
+    //     name: '90',
+    //     capacity: 78,
+    //   },
+    //   discipline: 'Physics II',
+    //   day: 1,
+    //   tutor: {
+    //     id: 3,
+    //     username: 'cfcf',
+    //     password: '4e4e4',
+    //     name: 'Tutor5',
+    //     surname: 'R',
+    //     email: 'dedede',
+    //     role: {
+    //       id: 1,
+    //       name: 'tutor',
+    //     },
+    //     organization: 'test',
+    //     group: {
+    //       id: 0,
+    //       name: 'mat-fiz-1',
+    //       organization: 'dostyk',
+    //     },
+    //     is_active: true,
+    //     is_verified: true,
+    //   },
+    // },
+    // ];
   }
 
   updateUser(user: IUser): Observable<IUser> {
@@ -329,10 +329,4 @@ export class UserService {
       Authorization: `Bearer ${token}`,
     });
   }
-
-  // generatePassword(): string {
-  //   const buffer = randomBytes(Math.ceil(this.PASSWORD_LENGTH / 2));
-  //   return buffer.toString('hex').slice(0, this.PASSWORD_LENGTH);
-  //   // return randomBytes(6).toString('hex');
-  // }
 }

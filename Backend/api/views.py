@@ -40,8 +40,10 @@ def get_tutor_events(request):
     return JsonResponse(events, safe=False)
 
 
-def get_users_events(request):
-    user = User.objects.get(id=request.GET.get('user_id', None))
+def get_users_events(request, user_id):
+    user = User.objects.get(id=user_id)
+    # user = User.objects.get(id=request.GET.get('user_id', None))
+
     user_id = user.group.id
     # events = Events.objects.filter(group__id=user_id).order_by('-day').order_by('-event_start_time')
     # serializer = EventsSerializer(events)

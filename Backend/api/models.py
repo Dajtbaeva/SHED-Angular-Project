@@ -65,7 +65,7 @@ class Room(models.Model):
     # room_id = mode
 
     def __str__(self):
-        return f'{self.id}: {self.room_name}, {self.organization}'
+        return f'{self.id}: {self.name}, {self.organization}'
 
 
 # class Disciplines(models.Model):
@@ -95,7 +95,7 @@ class Events(models.Model):
         verbose_name_plural = 'Events'
 
     def __str__(self):
-        return f'{self.id}: {self.discipline}, {self.event_start_time}, {self.day}, {self.room}, {self.tutor}'
+        return f'{self.id}: {self.discipline}, {self.event_start_time}, {self.day}, {self.room.name}, {self.tutor}'
 
 # class Participants(models.Model):
 #     event = models.ForeignKey(Events, on_delete=models.CASCADE)

@@ -10,7 +10,7 @@ def send_email(to_email, login, password):
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_PORT = 587
     EMAIL_HOST_USER = 'alibay.tileukhan@gmail.com'
-    EMAIL_HOST_PASSWORD = 'gwiqbdhvjwutfwsb'
+    EMAIL_HOST_PASSWORD = 'xbxgytmyyirrsicw'
 
     # Устанавливаем соединение с SMTP-сервером
     smtp_server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
@@ -170,15 +170,4 @@ class EventsSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-# Events.objects.filter(event_start_time!=time)
-# class ParticipantsSerializer(serializers.ModelSerializer):
-#     event = EventsSerializer()
-#     group = GroupSerializer()
-#
-#     def create(self, validated_data):
-#         participant = Participants.objects.create(**validated_data)
-#         return participant
-#
-#     def update(self, instance, validated_data):
-#         instance.event = validated_data.get('event')
-#         instance.group = validated_data.get('group')
+
