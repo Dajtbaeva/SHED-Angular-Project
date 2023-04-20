@@ -16,23 +16,22 @@ from api.models import *
 from api.serializers import *
 
 
-def get_roles(request):
-    roles = Role.objects.get(id=1)
-    print(roles)
-    return JsonResponse('',safe=False)
+def get_org_id(request):
+    token = request.META.get('HTTP_AUTHORIZATION')
+    if token is None:
+        raise AuthenticationFailed
+    token = token.split()[1]
+    decoded_data = jwt.decode(jwt=token,
+                              key=settings.SECRET_KEY,
+                              algorithms=["HS256"])
+    return decoded_data['org_id']
 
 
-def get_tutor_events(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    user_id = body['user_id']
+def get_tutor_events(request, user_id):
     events = []
-    for i in range(1, 8):
-        for j in range(8, 20):
-            if not Events.objects.filter(event_start_time=j, day=i, tutor__id=user_id).exists():
-                my_object = {}
-                # my_object = Events.objects.create(event_start_time=j, day=i)
-            else:
+    for i in range(1, 7):
+        for j in range(8, 21):
+            if Events.objects.filter(event_start_time=j, day=i, tutor__id=user_id).exists():
                 my_object = Events.objects.get(event_start_time=j, day=i, tutor__id=user_id)
                 my_object = EventsSerializer(my_object).data
             events.append(my_object)
@@ -41,33 +40,41 @@ def get_tutor_events(request):
 
 
 def get_users_events(request, user_id):
-    user = User.objects.get(id=user_id)
-    # user = User.objects.get(id=request.GET.get('user_id', None))
-
-    user_id = user.group.id
-    # events = Events.objects.filter(group__id=user_id).order_by('-day').order_by('-event_start_time')
-    # serializer = EventsSerializer(events)
-
+    try:
+        user = User.objects.get(id=user_id)
+    except ObjectDoesNotExist:
+        return JsonResponse({'error': 'user does not exist'}, safe=False)
+    if user.group is None:
+        return JsonResponse({'error': 'user does not contain in group'}, safe=False)
+    group_id = user.group.id
+    org_id = user.organization.id
     events = []
     for i in range(1, 7):
         for j in range(8, 21):
-            if Events.objects.filter(event_start_time=j, day=i, group__id=user_id).exists():
-                my_object = Events.objects.get(event_start_time=j, day=i, group__id=user_id)
+            if Events.objects.filter(event_start_time=j, day=i, group__id=group_id,
+                                     group__organization__id=org_id).exists():
+                my_object = Events.objects.get(event_start_time=j, day=i, group__id=group_id,
+                                               group__organization__id=org_id)
                 my_object = EventsSerializer(my_object).data
                 events.append(my_object)
     return JsonResponse(events, safe=False)
 
 
 def get_available_rooms(request):
+    try:
+        org_id = get_org_id(request)
+    except AuthenticationFailed:
+        return JsonResponse({'error': 'not authenticated'})
     time = request.GET.get('hour', None)
     day = request.GET.get('day', None)
-    events = Events.objects.filter(event_start_time=time, day=day)
+    events = Events.objects.filter(event_start_time=time, day=day,
+                                   room__organization__id=org_id)
     not_aviable_rooms = []
     if len(events) != 0:
         for event in events:
             not_aviable_rooms.append(event.room.id)
-    aviable_rooms = Room.objects.exclude(id__in=not_aviable_rooms)
-    serializer = RoomSerializer(aviable_rooms, many=True)
+    available_rooms = Room.objects.exclude(id__in=not_aviable_rooms).filter(organization__id=org_id)
+    serializer = RoomSerializer(available_rooms, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 
@@ -99,6 +106,7 @@ class LoginView(APIView):
 
 
 # Group
+
 class GroupListAPIView(APIView):
     def get(self, request):
         groups = Group.objects.all()
@@ -149,6 +157,7 @@ class GroupDetailAPIView(APIView):
 
 # User
 class UserListAPIView(APIView):
+    #  NEED TO ADD ORG_ID
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
@@ -163,6 +172,7 @@ class UserListAPIView(APIView):
 
 
 class TutorListAPIView(APIView):
+    #  NEED TO ADD ORG_ID
     def get(self, request):
         users = User.objects.all().filter(role=3)
         serializer = UserSerializer(users, many=True)
@@ -170,6 +180,8 @@ class TutorListAPIView(APIView):
 
 
 class StudentListAPIView(APIView):
+    #  NEED TO ADD ORG_ID
+
     def get(self, request):
         users = User.objects.all().filter(role=2)
         serializer = UserSerializer(users, many=True)
@@ -213,6 +225,8 @@ class UserDetailAPIView(APIView):
 
 # ROOM
 class RoomListAPIView(APIView):
+    #  NEED TO ADD ORG_ID
+
     def get(self, request):
         rooms = Room.objects.all()
         serializer = RoomSerializer(rooms, many=True)
@@ -263,6 +277,7 @@ class RoomDetailAPIView(APIView):
 
 # EVENTS
 class EventListAPIView(APIView):
+    #  NEED TO ADD ORG_ID
     def get(self, request):
         categories = Events.objects.all()
         serializer = EventsSerializer(categories, many=True)
@@ -307,52 +322,4 @@ class EventDetailAPIView(APIView):
         instance.delete()
         return Response({'deleted': True})
 
-# END
-
-
-# DISCIPLINES
-# class DisciplinesListAPIView(APIView):
-#     def get(self, request):
-#         categories = Disciplines.objects.all()
-#         serializer = DisciplinesSerializer(categories, many=True)
-#         return Response(serializer.data)
-#
-#     def post(self, request):
-#         serializer = DisciplinesSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# class DisciplinesDetailAPIView(APIView):
-#     def get_object(self, discipline_id):
-#         try:
-#             return Disciplines.objects.get(pk=discipline_id)
-#         except ObjectDoesNotExist as e:
-#             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
-#
-#     def get(self, request, discipline_id):
-#         instance = self.get_object(discipline_id)
-#         if type(instance) == Response:
-#             return instance
-#         serializer = DisciplinesSerializer(instance)
-#         return Response(serializer.data)
-#
-#     def put(self, request, discipline_id):
-#         instance = self.get_object(discipline_id)
-#         if type(instance) == Response:
-#             return instance
-#         serializer = DisciplinesSerializer(instance=instance, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#     def delete(self, request, discipline_id):
-#         instance = self.get_object(discipline_id)
-#         if type(instance) == Response:
-#             return instance
-#         instance.delete()
-#         return Response({'deleted': True})
 # END

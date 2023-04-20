@@ -18,7 +18,7 @@ class RoleAdmin(admin.ModelAdmin):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
+    list_display = ['id', 'name', 'organization']
 
 
 @admin.register(User)
@@ -33,7 +33,7 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(Events)
 class EventsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'event_start_time', 'day', 'room', 'tutor', 'group']
+    list_display = ['id', 'discipline', 'event_start_time', 'day', 'room', 'tutor', 'group']
 
 
 

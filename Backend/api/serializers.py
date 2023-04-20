@@ -1,16 +1,18 @@
 import smtplib
+from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import serializers
 from api.models import *
 import random
 import string
+from src import settings
 
 
 def send_email(to_email, login, password):
-    EMAIL_HOST = 'smtp.gmail.com'
-    EMAIL_PORT = 587
-    EMAIL_HOST_USER = 'alibay.tileukhan@gmail.com'
-    EMAIL_HOST_PASSWORD = 'xbxgytmyyirrsicw'
+    EMAIL_HOST = settings.EMAIL_HOST
+    EMAIL_PORT = settings.EMAIL_PORT
+    EMAIL_HOST_USER = settings.EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = settings.EMAIL_HOST_PASSWORD
 
     # Устанавливаем соединение с SMTP-сервером
     smtp_server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
@@ -18,8 +20,7 @@ def send_email(to_email, login, password):
     smtp_server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
 
     # Отправляем письмо
-    from_email = 'alibay.tileukhan@gmail.com'
-    # to_email = 'dajtbaeva@gmail.com'
+    from_email = EMAIL_HOST_USER
     message = "You were registered to platform SHED!\n" \
               f"Your username: {login}\n" \
               f"Your password: {password}"
@@ -57,9 +58,6 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    # organization = OrganizationSerializer()
-    # role = RoleSerializer()
-    # group = GroupSerializer()
     password = serializers.CharField(required=False)
     username = serializers.CharField(required=False)
 
@@ -127,6 +125,8 @@ class EventsSerializer(serializers.ModelSerializer):
                                  day=data.get('day'),
                                  group__id=data.get('group_id')).exists():
             raise serializers.ValidationError({"error": "time is not free"})
+        if 9 > data.get('event_start_time') > 20:
+            raise serializers.ValidationError({"error": "not correct time"})
         return data
 
     class Meta:
@@ -137,15 +137,24 @@ class EventsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print(validated_data)
         tutor_data = validated_data.pop('tutor_id')
-        tutor = User.objects.get(id=tutor_data)
+        try:
+            tutor = User.objects.get(id=tutor_data)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError({'error': 'tutor does not exists'})
         validated_data['tutor'] = tutor
 
         room_id = validated_data.pop('room_id')
-        room = Room.objects.get(id=room_id)
+        try:
+            room = Room.objects.get(id=room_id)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError({'error': 'room does not exists'})
         validated_data['room'] = room
 
         group_id = validated_data.pop('group_id')
-        group = Group.objects.get(id=group_id)
+        try:
+            group = Group.objects.get(id=group_id)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError({'error': 'group does not exists'})
         validated_data['group'] = group
 
         event = Events.objects.create(**validated_data)
@@ -157,17 +166,24 @@ class EventsSerializer(serializers.ModelSerializer):
         instance.day = validated_data.get('day')
 
         room_id = validated_data.pop('room_id')
-        room = Room.objects.get(id=room_id)
+        try:
+            room = Room.objects.get(id=room_id)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError({'error': 'room does not exists'})
         instance.room = room
 
         tutor_data = validated_data.pop('tutor_id')
-        tutor = User.objects.get(id=tutor_data)
+        try:
+            tutor = User.objects.get(id=tutor_data)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError({'error': 'tutor does not exists'})
         instance.tutor = tutor
 
         group_id = validated_data.pop('group_id')
-        group = Group.objects.get(id=group_id)
+        try:
+            group = Group.objects.get(id=group_id)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError({'error': 'group does not exists'})
         instance.group = group
         instance.save()
         return instance
-
-

@@ -1,5 +1,6 @@
 import bcrypt
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
@@ -26,7 +27,9 @@ class Group(models.Model):
 
 
 class User(models.Model):
+
     username = models.CharField(max_length=50, unique=True)
+
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
     password = models.CharField(max_length=250)
@@ -68,24 +71,10 @@ class Room(models.Model):
         return f'{self.id}: {self.name}, {self.organization}'
 
 
-# class Disciplines(models.Model):
-#     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-#     tutor = models.ForeignKey(User, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=50)
-#
-#     class Meta:
-#         verbose_name = 'Discipline'
-#         verbose_name_plural = 'Disciplines'
-#
-#     def __str__(self):
-#         return f'{self.id}: {self.name}, {self.tutor}, {self.organization}'
-
-
 class Events(models.Model):
     discipline = models.CharField(max_length=150)
     event_start_time = models.IntegerField()
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    # discipline = models.ForeignKey(Disciplines, on_delete=models.CASCADE)
     day = models.IntegerField()
     tutor = models.ForeignKey(User, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
@@ -96,14 +85,3 @@ class Events(models.Model):
 
     def __str__(self):
         return f'{self.id}: {self.discipline}, {self.event_start_time}, {self.day}, {self.room.name}, {self.tutor}'
-
-# class Participants(models.Model):
-#     event = models.ForeignKey(Events, on_delete=models.CASCADE)
-#     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-#
-#     class Meta:
-#         verbose_name = 'Participant'
-#         verbose_name_plural = 'Participants'
-#
-#     def __str__(self):
-#         return f'{self.id}: {self.group}, {self.event}'

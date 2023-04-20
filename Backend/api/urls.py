@@ -16,7 +16,6 @@ urlpatterns = [
     path('event/<int:event_id>', EventDetailAPIView.as_view()),
     path('available_rooms/', get_available_rooms),
     path('student/<int:user_id>/events', get_users_events),
-    path('get_tutor_events/', get_tutor_events),
-    path('roles/', get_roles)
+    path('tutor/<int:user_id>/events', get_tutor_events),
     # comment to check
 ]
