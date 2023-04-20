@@ -58,7 +58,6 @@ def get_users_events(request, user_id):
     return JsonResponse(events, safe=False)
 
 
-@api_view(('GET',))
 def get_available_rooms(request):
     time = request.GET.get('hour', None)
     day = request.GET.get('day', None)
@@ -69,7 +68,7 @@ def get_available_rooms(request):
             not_aviable_rooms.append(event.room.id)
     aviable_rooms = Room.objects.exclude(id__in=not_aviable_rooms)
     serializer = RoomSerializer(aviable_rooms, many=True)
-    return Response(serializer.data)
+    return JsonResponse(serializer.data, safe=False)
 
 
 class LoginView(APIView):

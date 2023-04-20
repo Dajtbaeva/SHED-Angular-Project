@@ -14,7 +14,7 @@
       <th>{{ item.time }}:00 - {{ item.time + 1 }}:00</th>
       <td *ngFor="let event of item.events">
         <p *ngIf="event.event_start_time">
-          {{ event.discipline }}, {{ event.tutor }}, {{ event.room }}
+          {{ event.discipline }}, {{ event.tutor.name }}, {{ event.room.name }}
         </p>
       </td>
     </tr>

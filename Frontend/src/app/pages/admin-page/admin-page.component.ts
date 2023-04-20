@@ -32,34 +32,12 @@ export class AdminPageComponent implements OnInit {
   addGroupId = '';
   addTutorId = '';
   addRoomId = '';
-  addGroup: IGroup = {
-    id: 33,
-    name: '',
-    organization: '',
-  };
   addTutorGroup = null;
   role_id = 0;
-  addTutor: IUser = {
-    id: 0,
-    username: '',
-    password: '',
-    name: '',
-    surname: '',
-    email: '',
-    role: 3,
-    organization: '1',
-    group: null,
-  };
   addTime = 0;
   addDay = '';
   groupName = '';
   disciplineName = '';
-  addRoom: IRoom = {
-    id: 0,
-    name: '',
-    capacity: 0,
-    organization: '',
-  };
   roomName = '';
   roomCap = 0;
   days = [
@@ -106,6 +84,7 @@ export class AdminPageComponent implements OnInit {
           this.addName = '';
           this.addSurname = '';
           this.addEmail = '';
+          this.userService.getTutors().subscribe((data) => (this.tutors = data));
         });
     } else {
       this.userService
@@ -169,29 +148,11 @@ export class AdminPageComponent implements OnInit {
       .subscribe(() => {
         this.addTime = 0;
         this.addDay = '';
-        this.addTutor = {
-          id: 0,
-          username: '',
-          password: '',
-          name: '',
-          surname: '',
-          email: '',
-          role: 3,
-          organization: '1',
-          group: null,
-        };
+        this.addTutorId = '',
         this.disciplineName = '';
-        this.addRoom = {
-          id: 0,
-          name: '',
-          capacity: 0,
-          organization: '',
-        };
-        this.addGroup = {
-          id: 0,
-          name: '',
-          organization: '',
-        };
+        this.addRoomId = '';
+        this.addGroupId = '';
+        this.userService.getEvents().subscribe((data) => (this.events = data));
       });
   }
 
