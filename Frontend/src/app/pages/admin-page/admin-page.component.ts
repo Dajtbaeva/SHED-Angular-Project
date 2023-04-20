@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IEvent } from 'src/app/models/event';
 import { IGroup } from 'src/app/models/group';
 import { IRoom } from 'src/app/models/room';
@@ -29,6 +29,7 @@ export class AdminPageComponent implements OnInit {
   addName = '';
   addSurname = '';
   addEmail = '';
+  addGroupId = '';
   addGroup: IGroup = {
     id: 33,
     name: '',
@@ -105,7 +106,6 @@ export class AdminPageComponent implements OnInit {
           this.addEmail = '';
         });
     } else {
-      const group_id = this.addGroup.id;
       this.userService
         .addNewUser(
           this.addName,
@@ -113,17 +113,13 @@ export class AdminPageComponent implements OnInit {
           this.addEmail,
           this.role_id,
           this.org_id,
-          group_id
+          Number(this.addGroupId)
         )
         .subscribe(() => {
           this.addName = '';
           this.addSurname = '';
           this.addEmail = '';
-          this.addGroup = {
-            id: 0,
-            name: '',
-            organization: '',
-          };
+          this.addGroupId = '';
         });
     }
   }
