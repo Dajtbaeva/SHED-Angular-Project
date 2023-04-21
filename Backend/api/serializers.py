@@ -40,7 +40,7 @@ class RoleSerializer(serializers.Serializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=False)
+    id = serializers.IntegerField(read_only=False, required=False)
 
     class Meta:
         model = Group
@@ -92,7 +92,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RoomSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=False)
+    id = serializers.IntegerField(read_only=False,required=False)
 
     class Meta:
         model = Room
@@ -120,12 +120,11 @@ class EventsSerializer(serializers.ModelSerializer):
     group_id = serializers.IntegerField(write_only=True)
 
     def validate(self, data):
-        print(data)
         if Events.objects.filter(event_start_time=data.get('event_start_time'),
                                  day=data.get('day'),
                                  group__id=data.get('group_id')).exists():
             raise serializers.ValidationError({"error": "time is not free"})
-        if 9 > data.get('event_start_time') > 20:
+        if 9 > data.get('event_start_time') or data.get('event_start_time') > 20:
             raise serializers.ValidationError({"error": "not correct time"})
         return data
 
