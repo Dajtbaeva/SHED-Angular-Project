@@ -34,7 +34,7 @@ def get_tutor_events(request, user_id):
             if Events.objects.filter(event_start_time=j, day=i, tutor__id=user_id).exists():
                 my_object = Events.objects.get(event_start_time=j, day=i, tutor__id=user_id)
                 my_object = EventsSerializer(my_object).data
-            events.append(my_object)
+                events.append(my_object)
 
     return JsonResponse(events, safe=False)
 
