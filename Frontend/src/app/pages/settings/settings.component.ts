@@ -18,7 +18,7 @@ export class SettingsComponent {
       this.userService.getUserById(+id).subscribe((currentUser) => {
         currentUser.username = this.username;
         this.username = '';
-        this.userService.updateUser3(currentUser);
+        this.userService.updateUser(currentUser);
         console.log(currentUser);
       });
       alert('Username is successfully changed!');
@@ -31,7 +31,7 @@ export class SettingsComponent {
       this.userService.getUserById(+id).subscribe((currentUser) => {
         currentUser.password = this.password;
         this.password = '';
-        this.userService.updateUser3(currentUser);
+        this.userService.updateUser(currentUser);
       });
       alert('Password is successfully changed!');
     }
