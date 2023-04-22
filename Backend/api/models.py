@@ -1,6 +1,5 @@
 import bcrypt
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
@@ -65,8 +64,6 @@ class Room(models.Model):
     capacity = models.IntegerField()
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
-    # room_id = mode
-
     def __str__(self):
         return f'{self.id}: {self.name}, {self.organization}'
 
@@ -78,6 +75,7 @@ class Events(models.Model):
     day = models.IntegerField()
     tutor = models.ForeignKey(User, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    status = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Event'

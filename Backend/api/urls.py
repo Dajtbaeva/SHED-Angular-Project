@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import *
-from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('login/', LoginView.as_view()),
@@ -17,5 +16,5 @@ urlpatterns = [
     path('available_rooms/', get_available_rooms),
     path('student/<int:user_id>/events', get_users_events),
     path('tutor/<int:user_id>/events', get_tutor_events),
-    # comment to check
+    path('change_event_status', change_event_status)
 ]

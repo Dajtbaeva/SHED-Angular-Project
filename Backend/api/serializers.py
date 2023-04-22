@@ -1,6 +1,5 @@
 import smtplib
 from django.core.exceptions import ObjectDoesNotExist
-
 from rest_framework import serializers
 from api.models import *
 import random
@@ -8,24 +7,17 @@ import string
 from src import settings
 
 
-def send_email(to_email, login, password):
+def send_email(to_email, msg):
     EMAIL_HOST = settings.EMAIL_HOST
     EMAIL_PORT = settings.EMAIL_PORT
     EMAIL_HOST_USER = settings.EMAIL_HOST_USER
     EMAIL_HOST_PASSWORD = settings.EMAIL_HOST_PASSWORD
 
-    # Устанавливаем соединение с SMTP-сервером
     smtp_server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
     smtp_server.starttls()
     smtp_server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
 
-    # Отправляем письмо
     from_email = EMAIL_HOST_USER
-    message = "You were registered to platform SHED!\n" \
-              f"Your username: {login}\n" \
-              f"Your password: {password}"
-    subject = "SHED_Registration"
-    msg = f'Subject: {subject}\n\n{message}'
     smtp_server.sendmail(from_email, to_email, msg)
 
 
@@ -72,7 +64,13 @@ class UserSerializer(serializers.ModelSerializer):
         instance.generate_username(instance.name, instance.surname)
         if password is not None:
             instance.set_password(password)
-        send_email(instance.email, instance.username, password)
+
+        message = "You were registered to platform SHED!\n" \
+                  f"Your username: {instance.username}\n" \
+                  f"Your password: {password}"
+        subject = "SHED_Registration"
+        msg = f'Subject: {subject}\n\n{message}'
+        send_email(instance.email, msg)
         instance.save()
         return instance
 
@@ -92,7 +90,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RoomSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=False,required=False)
+    id = serializers.IntegerField(read_only=False, required=False)
 
     class Meta:
         model = Room
@@ -118,11 +116,13 @@ class EventsSerializer(serializers.ModelSerializer):
     tutor_id = serializers.IntegerField(write_only=True)
     room_id = serializers.IntegerField(write_only=True)
     group_id = serializers.IntegerField(write_only=True)
+    id = serializers.IntegerField(required=False)
 
     def validate(self, data):
-        if Events.objects.filter(event_start_time=data.get('event_start_time'),
-                                 day=data.get('day'),
-                                 group__id=data.get('group_id')).exists():
+        if Events.objects.exclude(id=data.get('id', 0)). \
+                filter(event_start_time=data.get('event_start_time'),
+                       day=data.get('day'),
+                       group__id=data.get('group_id')).exists():
             raise serializers.ValidationError({"error": "time is not free"})
         if 9 > data.get('event_start_time') or data.get('event_start_time') > 20:
             raise serializers.ValidationError({"error": "not correct time"})

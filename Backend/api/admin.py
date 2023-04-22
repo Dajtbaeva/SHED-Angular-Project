@@ -3,9 +3,7 @@ from api.models import Organization, Role, User, Group, Room, Events
 
 
 # Register your models here.
-# admin.site.register(Organization)
-# admin.site.register(Role)
-# admin.site.register(User)
+
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
