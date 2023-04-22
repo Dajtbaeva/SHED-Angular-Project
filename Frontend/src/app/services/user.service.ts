@@ -124,16 +124,16 @@ export class UserService {
     return this.http.get<IEvent[]>(`${this.URL}/tutor/${user_id}/events`);
   }
 
+  // updateUser(user: IUser): Observable<IUser> {
+  //   console.log(user);
+  //   return this.http.put<IUser>(`${this.URL}/user/${user.id}/`, user, {
+  //     headers: this.getAuthHeaders(),
+  //   });
+  // }
+  // updateUser2(user: IUser): Observable<IUser> {
+  //   return this.http.put<IUser>(`${this.URL}/${user.id}`, user);
+  // }
   updateUser(user: IUser): Observable<IUser> {
-    console.log(user);
-    return this.http.put<IUser>(`${this.URL}/user/${user.id}/`, user, {
-      headers: this.getAuthHeaders(),
-    });
-  }
-  updateUser2(user: IUser): Observable<IUser> {
-    return this.http.put<IUser>(`${this.URL}/${user.id}`, user);
-  }
-  updateUser3(user: IUser): Observable<IUser> {
     return from(
       fetch(`${this.URL}/user/${user.id}`, {
         method: 'PUT',

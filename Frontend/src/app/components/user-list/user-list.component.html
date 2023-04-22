@@ -1,7 +1,10 @@
 <div class="users" *ngFor="let user of users">
   <div class="card">
     <div class="name">
-      <p>{{ user.name | titlecase }} {{ user.surname | titlecase }}</p>
+      <p>
+        {{ user.name | titlecase }} {{ user.surname | titlecase }},
+        {{ user.email }}
+      </p>
     </div>
     <div class="details">
       <button class="delete" (click)="deleteUser(user)">Delete</button>

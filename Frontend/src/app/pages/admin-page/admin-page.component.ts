@@ -18,9 +18,11 @@ export class AdminPageComponent implements OnInit {
     { name: 'Students', num: 3 },
     { name: 'Add new student', num: 4 },
     { name: 'Groups', num: 5 },
-    { name: 'Rooms', num: 6 },
-    { name: 'Events', num: 7 },
-    { name: 'Add new event', num: 8 },
+    { name: 'Add new group', num: 6 },
+    { name: 'Rooms', num: 7 },
+    { name: 'Add new room', num: 8 },
+    { name: 'Events', num: 9 },
+    { name: 'Add new event', num: 10 },
   ];
   is_loading = false;
   org_id = '';
@@ -41,6 +43,7 @@ export class AdminPageComponent implements OnInit {
   disciplineName = '';
   roomName = '';
   roomCap = 0;
+
   days = [
     { name: 'Monday' },
     { name: 'Tuesday' },
@@ -50,6 +53,7 @@ export class AdminPageComponent implements OnInit {
     { name: 'Saturday' },
   ];
   tutors: IUser[] = [];
+  students: IUser[] = [];
   groups: IGroup[] = [];
   rooms: IRoom[] = [];
   events: IEvent[] = [];
@@ -60,6 +64,7 @@ export class AdminPageComponent implements OnInit {
     const org = localStorage.getItem('org_id');
     if (org) this.org_id = org;
     this.userService.getTutors().subscribe((data) => (this.tutors = data));
+    this.userService.getStudents().subscribe((data) => (this.students = data));
     this.userService.getGroups().subscribe((data) => (this.groups = data));
     this.userService.getRooms().subscribe((data) => (this.rooms = data));
     this.userService.getEvents().subscribe((data) => (this.events = data));
@@ -113,6 +118,10 @@ export class AdminPageComponent implements OnInit {
       this.groupName = '';
       this.userService.getGroups().subscribe((data) => (this.groups = data));
     });
+  }
+
+  getStudentsByGroupId(group: number) {
+    return this.students.filter((s) => s.group === group);
   }
 
   deleteGroup(group: IGroup) {

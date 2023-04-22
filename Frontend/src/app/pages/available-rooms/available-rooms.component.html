@@ -9,8 +9,7 @@
       <div class="rooms" *ngFor="let room of rooms">
         <div class="card">
           <div class="name">
-            <p>{{ room.name | titlecase }}</p>
-            <p>{{ room.capacity }}</p>
+            <p>{{ room.name | titlecase }}, {{ room.capacity }}</p>
           </div>
         </div>
       </div>
