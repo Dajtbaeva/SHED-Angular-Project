@@ -1,4 +1,36 @@
 <h3>Available rooms</h3>
+<div class="form">
+  <p>
+    Enter start time:
+    <input
+      type="number"
+      [(ngModel)]="hour"
+      id="time"
+      name="time"
+      maxlength="2"
+      min="8"
+      max="20"
+      step="1"
+    />
+  </p>
+  <p>
+    Enter day:
+    <input
+      list="days"
+      data-list="days"
+      type="text"
+      [(ngModel)]="day"
+      id="day"
+      name="day"
+    />
+
+    <datalist id="days">
+      <option *ngFor="let day of days" value="{{ day.name }} "></option>
+    </datalist>
+  </p>
+  <button class="btn_in" (click)="onChange()">Search</button>
+  <button class="btn_in" (click)="getCurrentAvailableRooms()">Now</button>
+</div>
 <div class="content">
   <p *ngIf="is_loading">Loading...</p>
   <div>

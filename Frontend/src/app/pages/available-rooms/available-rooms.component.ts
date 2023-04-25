@@ -13,6 +13,14 @@ export class AvailableRoomsComponent implements OnInit {
   rooms: IRoom[] = [];
   invalid = false;
   is_loading = false;
+  days = [
+    { name: 'Monday' },
+    { name: 'Tuesday' },
+    { name: 'Wednesday' },
+    { name: 'Thursday' },
+    { name: 'Friday' },
+    { name: 'Saturday' },
+  ];
 
   constructor(private userService: UserService) {}
 
@@ -32,5 +40,33 @@ export class AvailableRoomsComponent implements OnInit {
       this.invalid = true;
       this.is_loading = false;
     }
+  }
+  getCurrentAvailableRooms() {
+    const currentDate = new Date();
+    this.hour = currentDate.getHours();
+    this.day = currentDate.getDay(); // return number
+    this.is_loading = true;
+    if (this.hour > 7 && this.hour < 21 && this.day !== 0) {
+      this.userService
+        .getAvailableRooms(this.hour, this.day)
+        .subscribe((data) => (this.rooms = data));
+      this.is_loading = false;
+    } else {
+      this.invalid = true;
+      this.is_loading = false;
+    }
+  }
+  updateAvailableRooms() {
+    this.is_loading = true;
+    this.userService
+      .getAvailableRooms(this.hour, this.day)
+      .subscribe((data) => {
+        this.rooms = data;
+        this.is_loading = false;
+        this.invalid = false;
+      });
+  }
+  onChange() {
+    this.updateAvailableRooms();
   }
 }
