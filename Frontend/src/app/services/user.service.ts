@@ -106,7 +106,7 @@ export class UserService {
     return this.http.get<IEvent[]>(`${this.URL}/event/`);
   }
 
-  getAvailableRooms(hour: number, day: number): Observable<IRoom[]> {
+  getAvailableRooms(hour: number, day: string): Observable<IRoom[]> {
     return this.http.get<IRoom[]>(
       `${this.URL}/available_rooms/?hour=${hour}&day=${day}`
     );

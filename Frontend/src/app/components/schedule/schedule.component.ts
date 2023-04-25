@@ -53,7 +53,7 @@ export class ScheduleComponent implements OnInit {
           .toPromise();
         if (data !== undefined) {
           this.events = data;
-          console.log(this.events);
+          // console.log(this.events);
         } else {
           console.error('Error: data is undefined');
         }
@@ -88,8 +88,8 @@ export class ScheduleComponent implements OnInit {
       const currentEvents = this.events.filter((event) => {
         return item.time === event.event_start_time;
       });
-      console.log(item.time);
-      console.log(currentEvents);
+      // console.log(item.time);
+      // console.log(currentEvents);
       for (let i = 1; i < 7; i++) {
         const event = currentEvents.find((event) => event.day === i);
         timeEvents.push(event ? event : this.emptyEvent);
