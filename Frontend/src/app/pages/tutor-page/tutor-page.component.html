@@ -11,24 +11,25 @@
 <div *ngIf="activeTab === 1" class="container" style="margin-left: 150px">
   <app-schedule></app-schedule>
 </div>
-<div
-  class="container"
-  *ngIf="activeTab === 2"
-  style="margin-left: 150px; margin-top: 1000px"
->
-  uhbvnoooooooofdk
+<div class="tabcontent" *ngIf="activeTab === 2" style="margin-left: 150px">
   <div *ngFor="let event of tutorEvents">
-    <div>
-      <h1>DARINA</h1>
+    <div class="card">
       <div class="name">
         <p>
           {{ event.discipline | titlecase }} {{ event.event_start_time }}:00 -
-          {{ event.event_start_time + 1 }}:00, {{ days[event.day].name }},
-          {{ event.tutor.name }} {{ event.tutor.surname }}
+          {{ event.event_start_time + 1 }}:00, {{ days[event.day].name }}
         </p>
       </div>
       <div class="details">
-        <!-- <button class="delete" (click)="changeStatus(event)">Delete</button> -->
+        <button
+          [ngClass]="{
+            hide: event.status,
+            show: !event.status
+          }"
+          (click)="changeStatus(event)"
+        >
+          {{ event.status ? "Cancel" : "Activate" }} this lesson
+        </button>
       </div>
     </div>
   </div>
