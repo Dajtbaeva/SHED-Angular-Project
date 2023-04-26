@@ -16,5 +16,5 @@ urlpatterns = [
     path('available_rooms/', get_available_rooms),
     path('student/<int:user_id>/events', get_users_events),
     path('tutor/<int:user_id>/events', get_tutor_events),
-    path('change_event_status', change_event_status)
+    path('change_event_status/', change_event_status)
 ]

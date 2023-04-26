@@ -38,6 +38,7 @@ export class ScheduleComponent implements OnInit {
       name: '',
       organization: '',
     },
+    status: true,
   };
 
   constructor(private userService: UserService) {}
