@@ -34,10 +34,10 @@ def change_event_status(request):
     except ObjectDoesNotExist:
         return JsonResponse({'error': "event does not exists"}, safe=False)
     event = instance
+    group_id = event.group.id
+    users = User.objects.all()
     if event.status:
         event.status = False
-        group_id = event.group.id
-        users = User.objects.all()
         for user in users:
             if user.group is not None and user.group.id == group_id:
                 message = f"Your lesson at {event.event_start_time} in {event.room.name} room was canceled!\n"
@@ -46,8 +46,14 @@ def change_event_status(request):
                 send_email(user.email, msg)
     else:
         event.status = True
+        for user in users:
+            if user.group is not None and user.group.id == group_id:
+                message = f"Your lesson at {event.event_start_time} in {event.room.name} room is activate!\n"
+                subject = f'{event.discipline} at {event.event_start_time}'
+                msg = f'Subject: {subject}\n\n{message}'
+                send_email(user.email, msg)
+
     event = EventsSerializer(event).data
-    print(event)
     event['room_id'] = event['room']['id']
     event['tutor_id'] = event['tutor']['id']
     event['group_id'] = event['group']['id']
