@@ -9,28 +9,52 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class AvailableRoomsComponent implements OnInit {
   hour = 0;
-  day = 0;
+  day = '';
   rooms: IRoom[] = [];
   invalid = false;
   is_loading = false;
+  days = [
+    { name: 'Monday' },
+    { name: 'Tuesday' },
+    { name: 'Wednesday' },
+    { name: 'Thursday' },
+    { name: 'Friday' },
+    { name: 'Saturday' },
+  ];
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
+    this.getCurrentAvailableRooms();
+  }
+  getCurrentAvailableRooms() {
     const currentDate = new Date();
     this.hour = currentDate.getHours();
-    this.day = currentDate.getDay(); // return number
+    const day = currentDate.getDay().toString();
+    this.day = this.days[currentDate.getDay() - 1].name; // return number
     this.is_loading = true;
-    if (this.hour > 7 && this.hour < 21 && this.day !== 0) {
+    if (this.hour > 7 && this.hour < 21 && day !== '') {
       this.userService
-        .getAvailableRooms(this.hour, this.day)
+        .getAvailableRooms(this.hour, day)
         .subscribe((data) => (this.rooms = data));
       this.is_loading = false;
-      // 0 -> Sun, 1 -> Mon, 2 -> Tue, 3 -> Wed, 4 -> Thu, 5 -> Fri, 6 -> Sat
-      // console.log(currentDate.getHours().toLocaleString());
     } else {
       this.invalid = true;
       this.is_loading = false;
     }
+  }
+  updateAvailableRooms() {
+    this.is_loading = true;
+    const day = this.days
+      .findIndex((d) => d.name === this.day.trim())
+      .toString();
+    this.userService.getAvailableRooms(this.hour, day).subscribe((data) => {
+      this.rooms = data;
+      this.is_loading = false;
+      this.invalid = false;
+    });
+  }
+  onChange() {
+    this.updateAvailableRooms();
   }
 }

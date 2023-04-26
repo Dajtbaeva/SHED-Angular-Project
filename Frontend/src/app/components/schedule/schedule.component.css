@@ -25,3 +25,6 @@ p {
 .active {
   background-color: #abf1e8;
 }
+.canceled {
+  background-color: #e03f3f;
+}

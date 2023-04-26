@@ -13,7 +13,7 @@
 </div>
 <div class="tabcontent" *ngIf="activeTab === 2">
   <div class="form">
-    <h3>Add new tutor</h3>
+    <h3>Add new tutor</h3> 
     <p>
       Name
       <input type="text" [(ngModel)]="addName" id="name" name="name" required />
@@ -88,16 +88,15 @@
   </div>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 5">
-  <div class="groups" *ngFor="let group of groups">
-    <div class="card">
-      <div class="name">
-        <p>{{ group.name | titlecase }}</p>
-      </div>
-      <div class="details">
-        <button class="delete" (click)="deleteGroup(group)">Delete</button>
-      </div>
-    </div>
-  </div>
+  <app-group-item
+    class=""
+    *ngFor="let group of groups"
+    [group]="group"
+    [students]="getStudentsByGroupId(group.id)"
+  >
+  </app-group-item>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 6">
   <div class="form">
     <h3>Add new group</h3>
     <p>
@@ -113,7 +112,7 @@
     <button class="btn_in" (click)="addNewGroup()">Add</button>
   </div>
 </div>
-<div class="tabcontent" *ngIf="activeTab === 6">
+<div class="tabcontent" *ngIf="activeTab === 7">
   <div class="rooms" *ngFor="let room of rooms">
     <div class="card">
       <div class="name">
@@ -124,6 +123,8 @@
       </div>
     </div>
   </div>
+</div>
+<div class="tabcontent" *ngIf="activeTab === 8">
   <div class="form">
     <h3>Add new room</h3>
     <p>
@@ -149,7 +150,7 @@
     <button class="btn_in" (click)="addNewRoom()">Add</button>
   </div>
 </div>
-<div class="tabcontent" *ngIf="activeTab === 7">
+<div class="tabcontent" *ngIf="activeTab === 9">
   <div class="events" *ngFor="let event of events">
     <div class="card">
       <div class="name">
@@ -165,7 +166,7 @@
     </div>
   </div>
 </div>
-<div class="tabcontent" *ngIf="activeTab === 8">
+<div class="tabcontent" *ngIf="activeTab === 10">
   <div class="form">
     <h3>Add new event</h3>
     <p>

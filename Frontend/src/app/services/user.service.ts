@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { AuthToken } from 'src/app/models/token';
@@ -106,7 +106,7 @@ export class UserService {
     return this.http.get<IEvent[]>(`${this.URL}/event/`);
   }
 
-  getAvailableRooms(hour: number, day: number): Observable<IRoom[]> {
+  getAvailableRooms(hour: number, day: string): Observable<IRoom[]> {
     return this.http.get<IRoom[]>(
       `${this.URL}/available_rooms/?hour=${hour}&day=${day}`
     );
@@ -124,16 +124,22 @@ export class UserService {
     return this.http.get<IEvent[]>(`${this.URL}/tutor/${user_id}/events`);
   }
 
+  updateEventStatus(event: IEvent) {
+    const requestBody = {
+      event: event.id,
+    };
+    return from(
+      fetch(`${this.URL}/change_event_status/`, {
+        method: 'PUT',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => response.json())
+    );
+  }
+
   updateUser(user: IUser): Observable<IUser> {
-    console.log(user);
-    return this.http.put<IUser>(`${this.URL}/user/${user.id}/`, user, {
-      headers: this.getAuthHeaders(),
-    });
-  }
-  updateUser2(user: IUser): Observable<IUser> {
-    return this.http.put<IUser>(`${this.URL}/${user.id}`, user);
-  }
-  updateUser3(user: IUser): Observable<IUser> {
     return from(
       fetch(`${this.URL}/user/${user.id}`, {
         method: 'PUT',
@@ -166,13 +172,6 @@ export class UserService {
   deleteEvent(id: number) {
     return fetch(`${this.URL}/event/${id}`, {
       method: 'DELETE',
-    });
-  }
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || '';
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
     });
   }
 }

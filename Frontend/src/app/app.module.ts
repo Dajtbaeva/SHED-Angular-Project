@@ -15,7 +15,7 @@ import { AvailableRoomsComponent } from './pages/available-rooms/available-rooms
 import { SettingsComponent } from './pages/settings/settings.component';
 import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 import { UserListComponent } from './components/user-list/user-list.component';
-import { UserItemComponent } from './components/user-item/user-item.component';
+import { GroupItemComponent } from './components/group-item/group-item.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import { UserItemComponent } from './components/user-item/user-item.component';
     SettingsComponent,
     NotFoundPageComponent,
     UserListComponent,
-    UserItemComponent,
+    GroupItemComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [
