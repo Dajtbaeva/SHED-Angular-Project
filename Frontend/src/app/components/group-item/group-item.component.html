@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="content">
+    <div class="name">
+      <p>{{ group.name | titlecase }}</p>
+    </div>
+    <div class="details">
+      <button
+        [ngClass]="{
+          hide: !studentsb,
+          show: studentsb
+        }"
+        (click)="studentsb = !studentsb"
+      >
+        {{ studentsb ? "Hide" : "Show" }} students
+      </button>
+      <button class="delete" (click)="deleteGroup(group)">Delete</button>
+    </div>
+  </div>
+  <div class="students" *ngIf="studentsb">
+    <div *ngIf="students.length > 0">
+      <div class="studentName" *ngFor="let student of students">
+        <p>{{ student.name | titlecase }} {{ student.surname | titlecase }}</p>
+      </div>
+    </div>
+    <div *ngIf="students.length === 0" class="studentName">
+      <p>No students</p>
+    </div>
+  </div>
+</div>

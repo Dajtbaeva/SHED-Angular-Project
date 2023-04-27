@@ -1,18 +1,15 @@
 import datetime
 import json
-import bcrypt
+
 import jwt
 from django.conf import settings
-from django.db.models import Model
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-from rest_framework.decorators import renderer_classes, api_view
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.core.exceptions import ObjectDoesNotExist
-from api.models import *
+
 from api.serializers import *
 
 
@@ -25,6 +22,47 @@ def get_org_id(request):
                               key=settings.SECRET_KEY,
                               algorithms=["HS256"])
     return decoded_data['org_id']
+
+
+@csrf_exempt
+def change_event_status(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    event_id = body['event']
+    try:
+        instance = Events.objects.get(id=event_id)
+    except ObjectDoesNotExist:
+        return JsonResponse({'error': "event does not exists"}, safe=False)
+    event = instance
+    group_id = event.group.id
+    users = User.objects.all()
+    if event.status:
+        event.status = False
+        for user in users:
+            if user.group is not None and user.group.id == group_id:
+                message = f"Your lesson at {event.event_start_time} in {event.room.name} room was canceled!\n"
+                subject = f'{event.discipline} at {event.event_start_time}'
+                msg = f'Subject: {subject}\n\n{message}'
+                send_email(user.email, msg)
+    else:
+        event.status = True
+        for user in users:
+            if user.group is not None and user.group.id == group_id:
+                message = f"Your lesson at {event.event_start_time} in {event.room.name} room is activate!\n"
+                subject = f'{event.discipline} at {event.event_start_time}'
+                msg = f'Subject: {subject}\n\n{message}'
+                send_email(user.email, msg)
+
+    event = EventsSerializer(event).data
+    event['room_id'] = event['room']['id']
+    event['tutor_id'] = event['tutor']['id']
+    event['group_id'] = event['group']['id']
+    serializer = EventsSerializer(instance=instance, data=event)
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data, safe=False)
+    else:
+        return JsonResponse(serializer.errors, safe=False)
 
 
 def get_tutor_events(request, user_id):
@@ -105,8 +143,6 @@ class LoginView(APIView):
         })
 
 
-# Group
-
 class GroupListAPIView(APIView):
     def get(self, request):
         groups = Group.objects.all()
@@ -153,11 +189,7 @@ class GroupDetailAPIView(APIView):
         return Response({'deleted': True})
 
 
-# END
-
-# User
 class UserListAPIView(APIView):
-    #  NEED TO ADD ORG_ID
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
@@ -172,7 +204,6 @@ class UserListAPIView(APIView):
 
 
 class TutorListAPIView(APIView):
-    #  NEED TO ADD ORG_ID
     def get(self, request):
         users = User.objects.all().filter(role=3)
         serializer = UserSerializer(users, many=True)
@@ -180,7 +211,6 @@ class TutorListAPIView(APIView):
 
 
 class StudentListAPIView(APIView):
-    #  NEED TO ADD ORG_ID
 
     def get(self, request):
         users = User.objects.all().filter(role=2)
@@ -220,12 +250,7 @@ class UserDetailAPIView(APIView):
         return Response({'deleted': True})
 
 
-# END
-
-
-# ROOM
 class RoomListAPIView(APIView):
-    #  NEED TO ADD ORG_ID
 
     def get(self, request):
         rooms = Room.objects.all()
@@ -272,12 +297,7 @@ class RoomDetailAPIView(APIView):
         return Response({'deleted': True})
 
 
-# END
-
-
-# EVENTS
 class EventListAPIView(APIView):
-    #  NEED TO ADD ORG_ID
     def get(self, request):
         categories = Events.objects.all()
         serializer = EventsSerializer(categories, many=True)
@@ -321,5 +341,3 @@ class EventDetailAPIView(APIView):
             return instance
         instance.delete()
         return Response({'deleted': True})
-
-# END
