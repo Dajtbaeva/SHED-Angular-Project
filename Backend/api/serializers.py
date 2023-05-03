@@ -10,7 +10,7 @@ from src import settings
 def send_email(to_email, msg):
     EMAIL_HOST = settings.EMAIL_HOST
     EMAIL_PORT = settings.EMAIL_PORT
-    EMAIL_HOST_USER = settings.EMAIL_HOST_USER
+    EMAIL_HOST_USER = settings.EMAIL_HOST_USER  # SHED_team@gmail.com
     EMAIL_HOST_PASSWORD = settings.EMAIL_HOST_PASSWORD
 
     smtp_server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
