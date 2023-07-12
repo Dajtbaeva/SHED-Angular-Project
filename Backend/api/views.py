@@ -99,19 +99,19 @@ def get_users_events(request, user_id):
 
 
 def get_available_rooms(request):
-    try:
-        org_id = get_org_id(request)
-    except AuthenticationFailed:
-        return JsonResponse({'error': 'not authenticated'})
+    # try:
+    #     org_id = get_org_id(request)
+    # except AuthenticationFailed:
+    #     return JsonResponse({'error': 'not authenticated'})
     time = request.GET.get('hour', None)
     day = request.GET.get('day', None)
     events = Events.objects.filter(event_start_time=time, day=day,
-                                   room__organization__id=org_id)
+                                   room__organization__id=1)
     not_aviable_rooms = []
     if len(events) != 0:
         for event in events:
             not_aviable_rooms.append(event.room.id)
-    available_rooms = Room.objects.exclude(id__in=not_aviable_rooms).filter(organization__id=org_id)
+    available_rooms = Room.objects.exclude(id__in=not_aviable_rooms).filter(organization__id=1)
     serializer = RoomSerializer(available_rooms, many=True)
     return JsonResponse(serializer.data, safe=False)
 
