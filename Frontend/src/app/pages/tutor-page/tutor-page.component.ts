@@ -43,10 +43,10 @@ export class TutorPageComponent implements OnInit {
   async changeStatus(event: IEvent) {
     const id = localStorage.getItem('user_id');
     this.userService.updateEventStatus(event);
-
     this.userService
       .getTutorEvents(Number(id))
       .subscribe((data) => (this.tutorEvents = data));
     console.log(event.status);
+    event.status = this.eventStatus;
   }
 }

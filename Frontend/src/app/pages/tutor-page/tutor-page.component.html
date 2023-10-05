@@ -17,7 +17,7 @@
       <div class="name">
         <p>
           {{ event.discipline | titlecase }} {{ event.event_start_time }}:00 -
-          {{ event.event_start_time + 1 }}:00, {{ days[event.day].name }}
+          {{ event.event_start_time + 1 }}:00, {{ days[event.day - 1].name }}
         </p>
       </div>
       <div class="details">
