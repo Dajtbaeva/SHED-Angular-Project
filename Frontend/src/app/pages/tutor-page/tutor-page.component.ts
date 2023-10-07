@@ -47,6 +47,6 @@ export class TutorPageComponent implements OnInit {
       .getTutorEvents(Number(id))
       .subscribe((data) => (this.tutorEvents = data));
     console.log(event.status);
-    event.status = this.eventStatus;
+    // event.status = this.eventStatus;
   }
 }

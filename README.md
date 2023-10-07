@@ -1,6 +1,6 @@
 # SHED
 
-#### Web Development 2023 discipline project
+#### Angular 2023 project
 ##### Go to the presentation folder
 
 ## CONTENT
@@ -20,16 +20,16 @@
     <li>
       <a href="#initiating">Initiating</a>
     </li>
-    <li><a href="#contact">Contact Us</a></li>
+    <li><a href="#contact">Contacts</a></li>
 </ol>
 
 ## Project overview
 
-The main goal of our project is to create a platform for the organization and management of schedules and events in any educational centers, small specialized schools or educational institutions. 
+The main goal of this project is to create a platform for organization and management of schedules and events in any educational centers, small specialized schools or educational institutions. 
 
-We also observed common problem in many students, that students could not find free rooms to study due to absence of study rooms in our university.
+It was observed common problem that students could not find free rooms to study due to absence of study rooms in our university.
 
-Our project for managing university and educational centers' rooms would be a comprehensive system designed to help academic institutions manage their facilities effectively. 
+This project for managing university and educational centers' rooms would be a comprehensive system designed to help academic institutions manage their facilities effectively. 
 
 The system would provide features such as room booking, scheduling, and availability tracking.
 
