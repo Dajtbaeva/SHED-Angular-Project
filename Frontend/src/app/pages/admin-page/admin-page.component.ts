@@ -63,11 +63,19 @@ export class AdminPageComponent implements OnInit {
   ngOnInit(): void {
     const org = localStorage.getItem('org_id');
     if (org) this.org_id = org;
-    this.userService.getTutors().subscribe((data) => (this.tutors = data));
-    this.userService.getStudents().subscribe((data) => (this.students = data));
-    this.userService.getGroups().subscribe((data) => (this.groups = data));
-    this.userService.getRooms().subscribe((data) => (this.rooms = data));
-    this.userService.getEvents().subscribe((data) => (this.events = data));
+    try {
+      this.is_loading = true;
+      this.userService.getTutors().subscribe((data) => (this.tutors = data));
+      this.userService
+        .getStudents()
+        .subscribe((data) => (this.students = data));
+      this.userService.getGroups().subscribe((data) => (this.groups = data));
+      this.userService.getRooms().subscribe((data) => (this.rooms = data));
+      this.userService.getEvents().subscribe((data) => (this.events = data));
+      this.is_loading = false;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   setTab(tabNumber: number) {
@@ -76,48 +84,60 @@ export class AdminPageComponent implements OnInit {
 
   addNewUser(role: string) {
     this.role_id = role === 'student' ? 2 : 3;
-    if (this.role_id === 3) {
-      this.userService
-        .addNewUser(
-          this.addName,
-          this.addSurname,
-          this.addEmail,
-          this.role_id,
-          this.org_id,
-          this.addTutorGroup
-        )
-        .subscribe(() => {
-          this.addName = '';
-          this.addSurname = '';
-          this.addEmail = '';
-          this.userService
-            .getTutors()
-            .subscribe((data) => (this.tutors = data));
-        });
-    } else {
-      this.userService
-        .addNewUser(
-          this.addName,
-          this.addSurname,
-          this.addEmail,
-          this.role_id,
-          this.org_id,
-          Number(this.addGroupId)
-        )
-        .subscribe(() => {
-          this.addName = '';
-          this.addSurname = '';
-          this.addEmail = '';
-          this.addGroupId = '';
-        });
+    try {
+      if (this.role_id === 3) {
+        this.userService
+          .addNewUser(
+            this.addName,
+            this.addSurname,
+            this.addEmail,
+            this.role_id,
+            this.org_id,
+            this.addTutorGroup
+          )
+          .subscribe(() => {
+            this.addName = '';
+            this.addSurname = '';
+            this.addEmail = '';
+            this.userService
+              .getTutors()
+              .subscribe((data) => (this.tutors = data));
+          });
+      } else {
+        this.userService
+          .addNewUser(
+            this.addName,
+            this.addSurname,
+            this.addEmail,
+            this.role_id,
+            this.org_id,
+            Number(this.addGroupId)
+          )
+          .subscribe(() => {
+            this.addName = '';
+            this.addSurname = '';
+            this.addEmail = '';
+            this.addGroupId = '';
+          });
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
   addNewGroup() {
-    this.userService.addNewGroup(this.groupName, this.org_id).subscribe(() => {
-      this.groupName = '';
-      this.userService.getGroups().subscribe((data) => (this.groups = data));
-    });
+    try {
+      this.userService
+        .addNewGroup(this.groupName, this.org_id)
+        .subscribe(() => {
+          this.groupName = '';
+          this.userService
+            .getGroups()
+            .subscribe((data) => (this.groups = data));
+        });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   getStudentsByGroupId(group: number) {
@@ -125,50 +145,72 @@ export class AdminPageComponent implements OnInit {
   }
 
   deleteGroup(group: IGroup) {
-    this.userService.deleteGroup(group.id);
-    this.groups = this.groups.filter((g) => g !== group);
+    try {
+      this.userService.deleteGroup(group.id);
+      this.groups = this.groups.filter((g) => g !== group);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   addNewRoom() {
-    this.userService
-      .addNewRoom(this.roomName, this.roomCap, this.org_id)
-      .subscribe(() => {
-        this.roomName = '';
-        this.roomCap = 0;
-        this.userService.getRooms().subscribe((data) => (this.rooms = data));
-      });
+    try {
+      this.userService
+        .addNewRoom(this.roomName, this.roomCap, this.org_id)
+        .subscribe(() => {
+          this.roomName = '';
+          this.roomCap = 0;
+          this.userService.getRooms().subscribe((data) => (this.rooms = data));
+        });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   deleteRoom(room: IRoom) {
-    this.userService.deleteRoom(room.id);
-    this.rooms = this.rooms.filter((r) => r !== room);
+    try {
+      this.userService.deleteRoom(room.id);
+      this.rooms = this.rooms.filter((r) => r !== room);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   addNewEvent() {
     const day =
       this.days.findIndex((day) => day.name === this.addDay.trim()) + 1;
-    console.log(day);
-    this.userService
-      .addNewEvent(
-        this.addTime,
-        Number(this.addRoomId),
-        this.disciplineName,
-        day,
-        Number(this.addTutorId),
-        Number(this.addGroupId)
-      )
-      .subscribe(() => {
-        this.addTime = 0;
-        this.addDay = '';
-        (this.addTutorId = ''), (this.disciplineName = '');
-        this.addRoomId = '';
-        this.addGroupId = '';
-        this.userService.getEvents().subscribe((data) => (this.events = data));
-      });
+    // console.log(day);
+    try {
+      this.userService
+        .addNewEvent(
+          this.addTime,
+          Number(this.addRoomId),
+          this.disciplineName,
+          day,
+          Number(this.addTutorId),
+          Number(this.addGroupId)
+        )
+        .subscribe(() => {
+          this.addTime = 0;
+          this.addDay = '';
+          (this.addTutorId = ''), (this.disciplineName = '');
+          this.addRoomId = '';
+          this.addGroupId = '';
+          this.userService
+            .getEvents()
+            .subscribe((data) => (this.events = data));
+        });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   deleteEvent(event: IEvent) {
-    this.userService.deleteEvent(event.id);
-    this.events = this.events.filter((e) => e !== event);
+    try {
+      this.userService.deleteEvent(event.id);
+      this.events = this.events.filter((e) => e !== event);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

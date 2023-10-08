@@ -21,9 +21,6 @@ export class AppComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
-    // const localLang = localStorage.getItem('lang');
-    // locale.value = localLang || 'en';
-    // const { locale } = useI18n();
     const token = localStorage.getItem('token');
     if (token) {
       this.is_logged = true;

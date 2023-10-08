@@ -12,6 +12,7 @@
   <app-schedule></app-schedule>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 2" style="margin-left: 150px">
+  <h2 *ngIf="load">Loading...</h2>
   <div *ngFor="let event of tutorEvents">
     <div class="card">
       <div class="name">

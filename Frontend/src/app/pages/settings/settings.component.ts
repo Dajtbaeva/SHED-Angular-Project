@@ -15,25 +15,33 @@ export class SettingsComponent {
   changeUsername() {
     const id = localStorage.getItem('user_id');
     if (id) {
-      this.userService.getUserById(+id).subscribe((currentUser) => {
-        currentUser.username = this.username;
-        this.username = '';
-        this.userService.updateUser(currentUser);
-        console.log(currentUser);
-      });
-      alert('Username is successfully changed!');
+      try {
+        this.userService.getUserById(+id).subscribe((currentUser) => {
+          currentUser.username = this.username;
+          this.username = '';
+          this.userService.updateUser(currentUser);
+          console.log(currentUser);
+        });
+        alert('Username is successfully changed!');
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 
   changePassword() {
     const id = localStorage.getItem('user_id');
     if (id) {
-      this.userService.getUserById(+id).subscribe((currentUser) => {
-        currentUser.password = this.password;
-        this.password = '';
-        this.userService.updateUser(currentUser);
-      });
-      alert('Password is successfully changed!');
+      try {
+        this.userService.getUserById(+id).subscribe((currentUser) => {
+          currentUser.password = this.password;
+          this.password = '';
+          this.userService.updateUser(currentUser);
+        });
+        alert('Password is successfully changed!');
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 }

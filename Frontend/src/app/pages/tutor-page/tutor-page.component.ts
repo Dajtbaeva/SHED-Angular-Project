@@ -11,9 +11,10 @@ import { UserService } from 'src/app/services/user.service';
 export class TutorPageComponent implements OnInit {
   @Output() exit = new EventEmitter();
   role = localStorage.getItem('role');
-  eventStatus = false; // initial status of event is true
+  eventStatus = true; // initial status of event is true
   tutorEvents: IEvent[] = [];
   activeTab = 1;
+  load = false;
   tabs: ITab[] = [
     { name: 'Schedule', num: 1 },
     { name: 'My events', num: 2 },
@@ -42,11 +43,24 @@ export class TutorPageComponent implements OnInit {
 
   async changeStatus(event: IEvent) {
     const id = localStorage.getItem('user_id');
-    this.userService.updateEventStatus(event);
-    this.userService
-      .getTutorEvents(Number(id))
-      .subscribe((data) => (this.tutorEvents = data));
-    console.log(event.status);
-    // event.status = this.eventStatus;
+    try {
+      this.load = true;
+      console.log(this.load);
+      this.userService
+        .updateEventStatus(event)
+        .subscribe(() =>
+          this.userService
+            .getTutorEvents(Number(id))
+            .subscribe(
+              (data) => (
+                (this.tutorEvents = data),
+                (this.activeTab = 1),
+                (this.load = false)
+              )
+            )
+        );
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
