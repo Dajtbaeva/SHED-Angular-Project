@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './services/user.service';
 import { Router } from '@angular/router';
+// import { useStore } from "@/store/store";
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  
   title = 'SHED';
   is_logged = false;
   username = '';
@@ -15,7 +17,7 @@ export class AppComponent implements OnInit {
   user_role = '';
   user_id = '';
   org_id = '';
-
+  
   constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {

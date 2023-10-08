@@ -31,13 +31,17 @@ export class AvailableRoomsComponent implements OnInit {
     const currentDate = new Date();
     this.hour = currentDate.getHours();
     const day = currentDate.getDay().toString();
-    this.day = this.days[currentDate.getDay() - 1].name; // return number
+    this.day = this.days[currentDate.getDay() - 1].name;
     this.is_loading = true;
     if (this.hour > 7 && this.hour < 21 && day !== '') {
-      this.userService
-        .getAvailableRooms(this.hour, day)
-        .subscribe((data) => (this.rooms = data));
-      this.is_loading = false;
+      try {
+        this.userService
+          .getAvailableRooms(this.hour, day)
+          .subscribe((data) => (this.rooms = data));
+        this.is_loading = false;
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       this.invalid = true;
       this.is_loading = false;
@@ -45,14 +49,18 @@ export class AvailableRoomsComponent implements OnInit {
   }
   updateAvailableRooms() {
     this.is_loading = true;
-    const day = this.days
-      .findIndex((d) => d.name === this.day.trim())
-      .toString();
-    this.userService.getAvailableRooms(this.hour, day).subscribe((data) => {
-      this.rooms = data;
-      this.is_loading = false;
-      this.invalid = false;
-    });
+    const day = (
+      this.days.findIndex((d) => d.name === this.day.trim()) + 1
+    ).toString();
+    try {
+      this.userService.getAvailableRooms(this.hour, day).subscribe((data) => {
+        this.rooms = data;
+        this.is_loading = false;
+        this.invalid = false;
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
   onChange() {
     this.updateAvailableRooms();

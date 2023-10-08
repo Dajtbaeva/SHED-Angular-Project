@@ -1,4 +1,4 @@
-navigation {
+.navigation {
   overflow: hidden;
   position: fixed;
   top: 0;
@@ -6,48 +6,49 @@ navigation {
 }
 .btn_out {
   width: 50%;
-  padding: 3px 0;
+  padding: 3px 5px;
   margin-top: 15px;
   font: inherit;
-  color: white;
+  background-color: transparent;
   cursor: pointer;
   border: none;
-  background: #18c0aa;
-  border-radius: 5px;
+  align-self: center;
+  margin: 20px 0;
 }
 .login button:hover {
   background: #83f0e1;
 }
-.btn_out {
-  align-self: center;
-  margin: 20px 0;
-}
 .nav {
   padding: 0 50px;
   height: 80px;
-  background-color: #18c0aa;
+  background: rgb(63, 251, 227);
+  background: linear-gradient(
+    202deg,
+    rgba(63, 251, 227, 0.9697128851540616) 0%,
+    rgba(225, 70, 252, 0.8128501400560224) 91%
+  );
+  color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
 }
 .menu {
+  color: #fff;
   list-style: none;
   height: 100%;
   display: flex;
   align-items: center;
 }
 .logo {
+  color: #fff;
   font-size: 40px;
   text-decoration: none;
-  color: #fff;
 }
 .link {
   color: #fff;
+  padding-left: 5px;
   font-size: 20px;
   text-decoration: none;
   margin-left: 20px;
-}
-.link:hover {
-  color: #b9b3b2;
 }

@@ -5,10 +5,12 @@
     [ngClass]="{ active: activeTab === tab.num }"
   >
     {{ tab.name }}
+    <!-- {{ $t(tab.name) }} -->
   </button>
 </div>
 
 <div class="tabcontent" *ngIf="activeTab === 1">
+  <p *ngIf="is_loading">Loading...</p>
   <app-user-list [role]="tutor"></app-user-list>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 2">

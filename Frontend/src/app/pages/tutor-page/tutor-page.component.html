@@ -12,12 +12,13 @@
   <app-schedule></app-schedule>
 </div>
 <div class="tabcontent" *ngIf="activeTab === 2" style="margin-left: 150px">
+  <h2 *ngIf="load">Loading...</h2>
   <div *ngFor="let event of tutorEvents">
     <div class="card">
       <div class="name">
         <p>
           {{ event.discipline | titlecase }} {{ event.event_start_time }}:00 -
-          {{ event.event_start_time + 1 }}:00, {{ days[event.day].name }}
+          {{ event.event_start_time + 1 }}:00, {{ days[event.day - 1].name }}
         </p>
       </div>
       <div class="details">
